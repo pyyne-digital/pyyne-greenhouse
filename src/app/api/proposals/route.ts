@@ -9,10 +9,10 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const session = await requireUser();
-  if (!session) return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
 
   if (!hasGithubAppConfig()) {
-    return NextResponse.json({ error: "GitHub App não configurado no servidor" }, { status: 503 });
+    return NextResponse.json({ error: "GitHub App not configured on the server" }, { status: 503 });
   }
 
   const proposals = await listProposals();
@@ -29,26 +29,26 @@ const CreateSchema = z.object({
 export async function POST(req: Request) {
   const session = await requireUser();
   if (!session?.user?.email) {
-    return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
   if (!hasGithubAppConfig()) {
-    return NextResponse.json({ error: "GitHub App não configurado no servidor" }, { status: 503 });
+    return NextResponse.json({ error: "GitHub App not configured on the server" }, { status: 503 });
   }
 
   const body = CreateSchema.safeParse(await req.json());
   if (!body.success) {
-    return NextResponse.json({ error: "Payload inválido", details: body.error.flatten() }, { status: 400 });
+    return NextResponse.json({ error: "Invalid payload", details: body.error.flatten() }, { status: 400 });
   }
 
   const parsed = PlaybookSchema.safeParse(body.data.content);
   if (!parsed.success) {
     return NextResponse.json(
-      { error: "Conteúdo fora do schema", details: parsed.error.flatten() },
+      { error: "Content does not match the schema", details: parsed.error.flatten() },
       { status: 400 }
     );
   }
   if (parsed.data.meta.slug !== body.data.slug) {
-    return NextResponse.json({ error: "Slug do conteúdo diverge do payload" }, { status: 400 });
+    return NextResponse.json({ error: "Content slug differs from payload slug" }, { status: 400 });
   }
 
   const meta: ProposalMeta = {
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
   } catch (e) {
     console.error("createProposal failed", e);
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Falha ao criar proposta" },
+      { error: e instanceof Error ? e.message : "Failed to create proposal" },
       { status: 500 }
     );
   }

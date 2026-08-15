@@ -11,22 +11,22 @@ const RejectSchema = z.object({ reason: z.string().min(4).max(500) });
 export async function POST(req: Request, { params }: { params: Promise<{ n: string }> }) {
   const session = await requireAdmin();
   if (!session?.user?.email) {
-    return NextResponse.json({ error: "Apenas admins podem rejeitar" }, { status: 403 });
+    return NextResponse.json({ error: "Only admins can reject" }, { status: 403 });
   }
   if (!hasGithubAppConfig()) {
-    return NextResponse.json({ error: "GitHub App não configurado no servidor" }, { status: 503 });
+    return NextResponse.json({ error: "GitHub App not configured on the server" }, { status: 503 });
   }
 
   const body = RejectSchema.safeParse(await req.json().catch(() => ({})));
   if (!body.success) {
-    return NextResponse.json({ error: "Informe o motivo da rejeição (mín. 4 caracteres)" }, { status: 400 });
+    return NextResponse.json({ error: "Please provide a rejection reason (min. 4 characters)" }, { status: 400 });
   }
 
   const { n } = await params;
   const proposal = await getProposal(Number(n));
-  if (!proposal) return NextResponse.json({ error: "Proposta não encontrada" }, { status: 404 });
+  if (!proposal) return NextResponse.json({ error: "Proposal not found" }, { status: 404 });
   if (proposal.state !== "open") {
-    return NextResponse.json({ error: "Proposta já foi fechada ou mergeada" }, { status: 409 });
+    return NextResponse.json({ error: "Proposal is already closed or merged" }, { status: 409 });
   }
 
   try {
@@ -35,7 +35,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ n: stri
   } catch (e) {
     console.error("rejectProposal failed", e);
     return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Falha ao rejeitar" },
+      { error: e instanceof Error ? e.message : "Failed to reject" },
       { status: 500 }
     );
   }

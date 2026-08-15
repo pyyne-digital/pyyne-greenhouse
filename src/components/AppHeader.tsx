@@ -16,8 +16,8 @@ export async function AppHeader() {
       </Link>
       <nav className="gh-app-nav">
         <Link href="/">Playbooks</Link>
-        <Link href="/proposals">Propostas</Link>
-        <Link href="/new">Novo playbook</Link>
+        <Link href="/proposals">Proposals</Link>
+        <Link href="/new">New playbook</Link>
         {user ? (
           <span className="gh-user-chip">
             {user.image ? (
@@ -34,12 +34,12 @@ export async function AppHeader() {
               style={{ display: "inline" }}
             >
               <button type="submit" className="gh-icon-btn" style={{ fontSize: 12 }}>
-                Sair
+                Sign out
               </button>
             </form>
           </span>
         ) : (
-          <Link href="/login">Entrar</Link>
+          <Link href="/login">Sign in</Link>
         )}
       </nav>
     </header>

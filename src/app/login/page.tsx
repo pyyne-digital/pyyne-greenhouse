@@ -16,12 +16,12 @@ export default async function LoginPage({
         <div className="gh-login-logo">🌱</div>
         <h1>Pyyne Greenhouse</h1>
         <p>
-          Onde ideias são plantadas, maturadas e crescem até virarem playbooks. Entre com sua conta
-          Google <strong>@pyyne.com</strong>.
+          Where ideas are planted, matured, and grown into playbooks. Sign in with your{" "}
+          <strong>@pyyne.com</strong> Google account.
         </p>
         {params.error ? (
           <p style={{ color: "#A32D2D", fontSize: 13 }}>
-            Acesso negado. Use uma conta Google do domínio pyyne.com.
+            Access denied. Use a Google account from the pyyne.com domain.
           </p>
         ) : null}
         <form
@@ -31,7 +31,7 @@ export default async function LoginPage({
           }}
         >
           <button type="submit" style={{ width: "100%" }}>
-            Entrar com Google
+            Sign in with Google
           </button>
         </form>
       </div>

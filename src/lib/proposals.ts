@@ -35,7 +35,7 @@ export async function ensureLabel(octokit: Awaited<ReturnType<typeof getOctokit>
       repo: REPO_NAME,
       name: LABEL,
       color: "679747",
-      description: "Proposta de mudança criada pelo Pyyne Greenhouse",
+      description: "Change proposal created by Pyyne Greenhouse",
     });
   }
 }
@@ -81,22 +81,22 @@ export async function createProposal(input: {
     branch,
     message:
       meta.type === "create"
-        ? `feat(playbook): novo playbook "${meta.playbookTitle}" via Greenhouse`
-        : `feat(playbook): atualiza "${meta.playbookTitle}" via Greenhouse`,
+        ? `feat(playbook): new playbook "${meta.playbookTitle}" via Greenhouse`
+        : `feat(playbook): update "${meta.playbookTitle}" via Greenhouse`,
     content: Buffer.from(JSON.stringify(PlaybookSchema.parse(content), null, 2) + "\n").toString("base64"),
     ...(existingSha ? { sha: existingSha } : {}),
   });
 
   await ensureLabel(octokit);
 
-  const titlePrefix = meta.type === "create" ? "[greenhouse] Novo playbook" : "[greenhouse]";
+  const titlePrefix = meta.type === "create" ? "[greenhouse] New playbook" : "[greenhouse]";
   const { data: pr } = await octokit.pulls.create({
     owner: REPO_OWNER,
     repo: REPO_NAME,
     title: `${titlePrefix}: ${meta.playbookTitle} — ${meta.summary.slice(0, 72)}`,
     head: branch,
     base: "main",
-    body: `${encodeMeta(meta)}\n\n## Proposta do Greenhouse\n\n**Autor:** ${meta.author.name} (${meta.author.email})\n\n**Resumo:** ${meta.summary}\n\n> Revise o antes/depois visual em ${"/proposals"} do Greenhouse antes de aprovar.`,
+    body: `${encodeMeta(meta)}\n\n## Greenhouse proposal\n\n**Author:** ${meta.author.name} (${meta.author.email})\n\n**Summary:** ${meta.summary}\n\n> Review the visual before/after at ${"/proposals"} in Greenhouse before approving.`,
   });
 
   await octokit.issues.addLabels({
@@ -168,7 +168,7 @@ export async function mergeProposal(number: number, approverEmail: string) {
     owner: REPO_OWNER,
     repo: REPO_NAME,
     issue_number: number,
-    body: `Aprovado e publicado por ${approverEmail} via Greenhouse.`,
+    body: `Approved and published by ${approverEmail} via Greenhouse.`,
   });
 }
 
@@ -178,7 +178,7 @@ export async function rejectProposal(number: number, approverEmail: string, reas
     owner: REPO_OWNER,
     repo: REPO_NAME,
     issue_number: number,
-    body: `Rejeitado por ${approverEmail} via Greenhouse.\n\n**Motivo:** ${reason}`,
+    body: `Rejected by ${approverEmail} via Greenhouse.\n\n**Reason:** ${reason}`,
   });
   await octokit.pulls.update({
     owner: REPO_OWNER,

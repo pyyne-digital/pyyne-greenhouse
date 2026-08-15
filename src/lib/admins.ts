@@ -2,7 +2,7 @@ import { AdminsSchema } from "@playbook/schema";
 import type { Admins } from "@playbook/types";
 import rawAdmins from "@content/admins.json";
 
-// Import estático: o JSON entra no bundle (deploy na Vercel a cada push mantém fresco).
+// Static import: the JSON is bundled (Vercel redeploys on every push, keeping it fresh).
 const admins: Admins = AdminsSchema.parse(rawAdmins);
 
 export function getAdmins(): Admins {

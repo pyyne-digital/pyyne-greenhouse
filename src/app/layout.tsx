@@ -5,12 +5,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Pyyne Greenhouse",
-  description: "Onde playbooks da Pyyne são plantados, maturados e crescem.",
+    description: "Where Pyyne playbooks are planted, matured, and grown.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="en">
       <body>{children}</body>
     </html>
   );

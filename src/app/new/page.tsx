@@ -14,10 +14,10 @@ export default async function NewPlaybookPage() {
       <AppHeader />
       <main className="gh-container">
         <div className="gh-wizard">
-          <h1 className="gh-page-title">Novo playbook</h1>
+          <h1 className="gh-page-title">New playbook</h1>
           <p className="gh-page-sub">
-            Plante uma nova ideia. Ela passa pela mesma aprovação de sempre e, depois do merge, vira
-            um site próprio no GitHub Pages.
+            Plant a new idea. It goes through the same approval flow as any change and, after the
+            merge, gets its own site on GitHub Pages.
           </p>
           <NewPlaybookWizard />
         </div>

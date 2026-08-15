@@ -2,8 +2,8 @@
  * Static site generator: content/playbooks/*.json → out/ (GitHub Pages).
  *
  * Output:
- *   out/index.html            — lista de playbooks
- *   out/<slug>/index.html     — playbook completo (navegação por hash)
+ *   out/index.html            — playbook list
+ *   out/<slug>/index.html     — full playbook (hash navigation)
  *   out/assets/*              — css + logo
  */
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, copyFileSync, rmSync } from "fs";
@@ -96,7 +96,7 @@ function renderIndex(playbooks: Playbook[]): string {
         <h2>${p.meta.title}</h2>
         <p>${p.meta.description}</p>
         <div class="gh-tags">${p.meta.tags.map((t) => `<span>${t}</span>`).join("")}</div>
-        <p class="gh-updated">Atualizado em ${p.meta.lastUpdated}</p>
+        <p class="gh-updated">Updated ${p.meta.lastUpdated}</p>
       </a>`
     )
     .join("");
@@ -112,7 +112,7 @@ function renderIndex(playbooks: Playbook[]): string {
     <main class="gh-main">
       <p class="gh-eyebrow">Pyyne Digital</p>
       <h1>Playbooks</h1>
-      <p class="gh-sub">Guias vivos de como trabalhamos. Criados e mantidos pelo time no Greenhouse.</p>
+      <p class="gh-sub">Living guides on how we work. Created and maintained by the team in Greenhouse.</p>
       <div class="gh-grid">${cards}</div>
     </main>
   </div>`;

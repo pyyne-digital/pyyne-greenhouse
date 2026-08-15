@@ -8,16 +8,16 @@ export const dynamic = "force-dynamic";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ n: string }> }) {
   const session = await requireUser();
-  if (!session) return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+  if (!session) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   if (!hasGithubAppConfig()) {
-    return NextResponse.json({ error: "GitHub App não configurado no servidor" }, { status: 503 });
+    return NextResponse.json({ error: "GitHub App not configured on the server" }, { status: 503 });
   }
 
   const { n } = await params;
   const proposal = await getProposal(Number(n));
-  if (!proposal) return NextResponse.json({ error: "Proposta não encontrada" }, { status: 404 });
+  if (!proposal) return NextResponse.json({ error: "Proposal not found" }, { status: 404 });
   if (!proposal.after) {
-    return NextResponse.json({ error: "Conteúdo da proposta não encontrado no branch" }, { status: 500 });
+    return NextResponse.json({ error: "Proposal content not found on the branch" }, { status: 500 });
   }
 
   const diff = diffPlaybooks(proposal.before, proposal.after);

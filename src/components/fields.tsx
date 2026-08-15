@@ -115,7 +115,7 @@ export function ColorField({
   );
 }
 
-/** Editor de lista de strings (add/remove/edit/reorder). */
+/** String list editor (add/remove/edit/reorder). */
 export function StringListField({
   label,
   items,
@@ -152,20 +152,20 @@ export function StringListField({
             <input type="text" value={item} onChange={(e) => set(i, e.target.value)} style={{ flex: 1 }} />
           )}
           <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <button type="button" className="gh-icon-btn" onClick={() => move(i, -1)} title="Mover para cima">
+            <button type="button" className="gh-icon-btn" onClick={() => move(i, -1)} title="Move up">
               ↑
             </button>
-            <button type="button" className="gh-icon-btn" onClick={() => move(i, 1)} title="Mover para baixo">
+            <button type="button" className="gh-icon-btn" onClick={() => move(i, 1)} title="Move down">
               ↓
             </button>
-            <button type="button" className="gh-icon-btn" onClick={() => remove(i)} title="Remover">
+            <button type="button" className="gh-icon-btn" onClick={() => remove(i)} title="Remove">
               ✕
             </button>
           </span>
         </div>
       ))}
       <button type="button" className="gh-icon-btn" onClick={() => onChange([...items, ""])}>
-        + Adicionar item
+        + Add item
       </button>
     </fieldset>
   );

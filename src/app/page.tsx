@@ -13,17 +13,17 @@ export default async function Home() {
       <main className="gh-container">
         <h1 className="gh-page-title">Playbooks</h1>
         <p className="gh-page-sub">
-          Guias vivos de como trabalhamos. Qualquer pessoa @pyyne.com pode sugerir mudanças;
-          admins aprovam e o deploy é automático.
+          Living guides on how we work. Anyone @pyyne.com can suggest changes; admins approve and
+          deployment is automatic.
         </p>
 
         {playbooks.length === 0 ? (
           <div className="gh-empty">
             <div className="gh-empty-icon">🌱</div>
-            <h3>Nenhum playbook ainda</h3>
-            <p>Plante a primeira ideia: crie um playbook e submeta para aprovação.</p>
+            <h3>No playbooks yet</h3>
+            <p>Plant the first idea: create a playbook and submit it for approval.</p>
             <Link href="/new" role="button">
-              Criar playbook
+              Create playbook
             </Link>
           </div>
         ) : (
@@ -43,10 +43,10 @@ export default async function Home() {
                 </div>
                 <div className="gh-pb-card-actions">
                   <Link href={`/playbooks/${p.meta.slug}`} role="button" className="outline">
-                    Visualizar
+                    View
                   </Link>
                   <Link href={`/playbooks/${p.meta.slug}/edit`} role="button">
-                    Editar
+                    Edit
                   </Link>
                 </div>
               </div>

@@ -18,7 +18,7 @@ export async function getOctokit(): Promise<Octokit> {
   if (cachedOctokit) return cachedOctokit;
   if (!hasGithubAppConfig()) {
     throw new Error(
-      "GitHub App não configurado. Defina GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY e GITHUB_APP_INSTALLATION_ID."
+      "GitHub App not configured. Set GITHUB_APP_ID, GITHUB_APP_PRIVATE_KEY and GITHUB_APP_INSTALLATION_ID."
     );
   }
   const app = new App({

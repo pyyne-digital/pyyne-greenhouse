@@ -90,7 +90,7 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
     });
 
   const deletePage = (id: string) => {
-    if (draft.pages.length <= 1) return alert("O playbook precisa de pelo menos uma página.");
+    if (draft.pages.length <= 1) return alert("The playbook needs at least one page.");
     mutate((d) => {
       d.pages = d.pages.filter((p) => p.id !== id);
       d.nav.forEach((g) => (g.pageIds = g.pageIds.filter((x) => x !== id)));
@@ -108,10 +108,10 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
         body: JSON.stringify({ type: "edit", slug: draft.meta.slug, content: draft, summary }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Falha ao submeter");
+      if (!res.ok) throw new Error(data.error ?? "Submission failed");
       setSubmitResult({ url: data.url });
     } catch (e) {
-      setSubmitResult({ error: e instanceof Error ? e.message : "Erro desconhecido" });
+      setSubmitResult({ error: e instanceof Error ? e.message : "Unknown error" });
     } finally {
       setSubmitting(false);
     }
@@ -129,11 +129,11 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
         </Link>
         <nav className="gh-app-nav">
           <span style={{ fontSize: 13, color: dirty ? "#854F0B" : "#9a9a96" }}>
-            {dirty ? "● mudanças não submetidas" : "sem mudanças"}
+            {dirty ? "● unsubmitted changes" : "no changes"}
           </span>
-          <Link href={`/playbooks/${draft.meta.slug}`}>Visualizar</Link>
+          <Link href={`/playbooks/${draft.meta.slug}`}>Preview</Link>
           <button type="button" disabled={!dirty || submitting} onClick={() => setShowSubmit(true)}>
-            Submeter para aprovação
+            Submit for approval
           </button>
         </nav>
       </header>
@@ -143,7 +143,7 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
           {/* ── Left: pages + palette ── */}
           <div>
             <div className="gh-editor-panel gh-editor-pages" style={{ marginBottom: 16 }}>
-              <h4>Páginas</h4>
+              <h4>Pages</h4>
               <ul>
                 {draft.nav.map((g) => (
                   <React.Fragment key={g.group}>
@@ -160,10 +160,10 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                             <span className="gh-page-ops">
                               <span
                                 role="button"
-                                title="Remover página"
+                                title="Delete page"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (confirm(`Remover a página "${p.label}"?`)) deletePage(pid);
+                                  if (confirm(`Delete the page "${p.label}"?`)) deletePage(pid);
                                 }}
                               >
                                 <Icon name="trash" size={13} />
@@ -177,12 +177,12 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                 ))}
               </ul>
               <button type="button" className="gh-icon-btn" style={{ marginTop: 8, width: "100%" }} onClick={addPage}>
-                + Nova página
+                + New page
               </button>
             </div>
 
             <div className="gh-editor-panel gh-block-palette">
-              <h4>Adicionar elemento</h4>
+              <h4>Add element</h4>
               {BLOCK_TYPES.map((t) => (
                 <button key={t} type="button" onClick={() => addBlock(t)}>
                   {BLOCK_LABELS[t].label}
@@ -204,7 +204,7 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                     <div className="pb-page-divider" />
                     {page?.blocks.length === 0 ? (
                       <p style={{ color: "#9a9a96", fontSize: 14, padding: "32px 0", textAlign: "center" }}>
-                        Página vazia — adicione um elemento pela paleta à esquerda.
+                        Empty page — add an element from the palette on the left.
                       </p>
                     ) : null}
                     {page?.blocks.map((b, i) => (
@@ -217,16 +217,16 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                         }}
                       >
                         <div className="gh-block-toolbar">
-                          <button type="button" title="Mover para cima" onClick={(e) => { e.stopPropagation(); moveBlock(i, -1); }}>
+                          <button type="button" title="Move up" onClick={(e) => { e.stopPropagation(); moveBlock(i, -1); }}>
                             <Icon name="chevron-up" size={14} />
                           </button>
-                          <button type="button" title="Mover para baixo" onClick={(e) => { e.stopPropagation(); moveBlock(i, 1); }}>
+                          <button type="button" title="Move down" onClick={(e) => { e.stopPropagation(); moveBlock(i, 1); }}>
                             <Icon name="chevron-down" size={14} />
                           </button>
-                          <button type="button" title="Duplicar" onClick={(e) => { e.stopPropagation(); duplicateBlock(i); }}>
+                          <button type="button" title="Duplicate" onClick={(e) => { e.stopPropagation(); duplicateBlock(i); }}>
                             <Icon name="copy" size={14} />
                           </button>
-                          <button type="button" title="Remover" onClick={(e) => { e.stopPropagation(); deleteBlock(i); }}>
+                          <button type="button" title="Delete" onClick={(e) => { e.stopPropagation(); deleteBlock(i); }}>
                             <Icon name="trash" size={14} />
                           </button>
                         </div>
@@ -244,9 +244,9 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
             <div style={{ display: "flex", gap: 4, marginBottom: 16, flexWrap: "wrap" }}>
               {(
                 [
-                  ["block", "Bloco"],
-                  ["page", "Página"],
-                  ["theme", "Tema"],
+                  ["block", "Block"],
+                  ["page", "Page"],
+                  ["theme", "Theme"],
                   ["meta", "Meta"],
                 ] as [InspectorTab, string][]
               ).map(([t, label]) => (
@@ -280,18 +280,18 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
 
             {tab === "page" && page ? (
               <>
-                <h4>Página</h4>
-                <TextField label="Rótulo (menu)" value={page.label} onChange={(v) => mutatePage((p) => (p.label = v))} />
-                <IconField label="Ícone" value={page.icon} onChange={(v) => mutatePage((p) => (p.icon = v))} />
+                <h4>Page</h4>
+                <TextField label="Label (menu)" value={page.label} onChange={(v) => mutatePage((p) => (p.label = v))} />
+                <IconField label="Icon" value={page.icon} onChange={(v) => mutatePage((p) => (p.icon = v))} />
                 <TextField label="Eyebrow" value={page.eyebrow} onChange={(v) => mutatePage((p) => (p.eyebrow = v))} />
-                <TextField label="Título" value={page.title} onChange={(v) => mutatePage((p) => (p.title = v))} />
-                <TextField label="Subtítulo" multiline value={page.subtitle} onChange={(v) => mutatePage((p) => (p.subtitle = v))} />
+                <TextField label="Title" value={page.title} onChange={(v) => mutatePage((p) => (p.title = v))} />
+                <TextField label="Subtitle" multiline value={page.subtitle} onChange={(v) => mutatePage((p) => (p.subtitle = v))} />
                 <SelectNavGroup draft={draft} pageId={page.id} onMove={(groupIdx) => mutate((d) => {
                   d.nav.forEach((g) => (g.pageIds = g.pageIds.filter((x) => x !== page.id)));
                   d.nav[groupIdx]?.pageIds.push(page.id);
                 })} />
                 <TextField
-                  label="Grupo de navegação (renomear)"
+                  label="Navigation group (rename)"
                   value={draft.nav.find((g) => g.pageIds.includes(page.id))?.group ?? ""}
                   onChange={(v) =>
                     mutate((d) => {
@@ -305,16 +305,16 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
 
             {tab === "theme" ? (
               <>
-                <h4>Cores da marca</h4>
+                <h4>Brand colors</h4>
                 {(
                   [
-                    ["brand", "Verde principal"],
-                    ["brandDark", "Verde escuro"],
-                    ["brandDeep", "Verde profundo"],
-                    ["brandLight", "Verde claro"],
-                    ["brandMid", "Verde médio"],
-                    ["brandSage", "Sálvia (bordas)"],
-                    ["brandSoft", "Verde suave"],
+                    ["brand", "Primary green"],
+                    ["brandDark", "Dark green"],
+                    ["brandDeep", "Deep green"],
+                    ["brandLight", "Light green"],
+                    ["brandMid", "Mid green"],
+                    ["brandSage", "Sage (borders)"],
+                    ["brandSoft", "Soft green"],
                   ] as [keyof Theme["colors"], string][]
                 ).map(([k, label]) => (
                   <ColorField
@@ -324,16 +324,16 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                     onChange={(v) => mutate((d) => (d.theme.colors[k] = v))}
                   />
                 ))}
-                <h4 style={{ marginTop: 16 }}>Texto</h4>
+                <h4 style={{ marginTop: 16 }}>Text</h4>
                 {(
                   [
-                    ["ink", "Texto principal"],
-                    ["ink2", "Texto secundário"],
-                    ["ink3", "Texto terciário"],
-                    ["ink4", "Texto suave"],
-                    ["surface", "Superfície"],
-                    ["surface2", "Fundo"],
-                    ["surface3", "Superfície 3"],
+                    ["ink", "Primary text"],
+                    ["ink2", "Secondary text"],
+                    ["ink3", "Tertiary text"],
+                    ["ink4", "Muted text"],
+                    ["surface", "Surface"],
+                    ["surface2", "Background"],
+                    ["surface3", "Surface 3"],
                   ] as [keyof Theme["colors"], string][]
                 ).map(([k, label]) => (
                   <ColorField
@@ -343,20 +343,20 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                     onChange={(v) => mutate((d) => (d.theme.colors[k] = v))}
                   />
                 ))}
-                <h4 style={{ marginTop: 16 }}>Fontes</h4>
-                <TextField label="Títulos (display)" value={draft.theme.fonts.display} onChange={(v) => mutate((d) => (d.theme.fonts.display = v))} />
-                <TextField label="Corpo" value={draft.theme.fonts.body} onChange={(v) => mutate((d) => (d.theme.fonts.body = v))} />
+                <h4 style={{ marginTop: 16 }}>Fonts</h4>
+                <TextField label="Headings (display)" value={draft.theme.fonts.display} onChange={(v) => mutate((d) => (d.theme.fonts.display = v))} />
+                <TextField label="Body" value={draft.theme.fonts.body} onChange={(v) => mutate((d) => (d.theme.fonts.body = v))} />
                 <TextField label="Mono" value={draft.theme.fonts.mono} onChange={(v) => mutate((d) => (d.theme.fonts.mono = v))} />
               </>
             ) : null}
 
             {tab === "meta" ? (
               <>
-                <h4>Metadados do playbook</h4>
-                <TextField label="Título" value={draft.meta.title} onChange={(v) => mutate((d) => (d.meta.title = v))} />
-                <TextField label="Descrição" multiline value={draft.meta.description} onChange={(v) => mutate((d) => (d.meta.description = v))} />
-                <TextField label="Versão" value={draft.meta.version} onChange={(v) => mutate((d) => (d.meta.version = v))} />
-                <TextField label="Última atualização" value={draft.meta.lastUpdated} onChange={(v) => mutate((d) => (d.meta.lastUpdated = v))} />
+                <h4>Playbook metadata</h4>
+                <TextField label="Title" value={draft.meta.title} onChange={(v) => mutate((d) => (d.meta.title = v))} />
+                <TextField label="Description" multiline value={draft.meta.description} onChange={(v) => mutate((d) => (d.meta.description = v))} />
+                <TextField label="Version" value={draft.meta.version} onChange={(v) => mutate((d) => (d.meta.version = v))} />
+                <TextField label="Last updated" value={draft.meta.lastUpdated} onChange={(v) => mutate((d) => (d.meta.lastUpdated = v))} />
                 <TextField label="Favicon (emoji)" value={draft.meta.favicon} onChange={(v) => mutate((d) => (d.meta.favicon = v))} />
                 <StringListField
                   label="Tags"
@@ -374,31 +374,31 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
       {showSubmit ? (
         <dialog open>
           <article style={{ maxWidth: 520 }}>
-            <h3 style={{ fontSize: 18 }}>Submeter para aprovação</h3>
+            <h3 style={{ fontSize: 18 }}>Submit for approval</h3>
             {submitResult && "url" in submitResult ? (
               <>
-                <p>Sua proposta foi criada e aguarda aprovação de um admin.</p>
+                <p>Your proposal was created and is waiting for an admin&apos;s approval.</p>
                 <p>
                   <a href={submitResult.url} target="_blank" rel="noreferrer">
-                    Ver pull request no GitHub ↗
+                    View pull request on GitHub ↗
                   </a>
                 </p>
                 <footer>
-                  <Link href="/proposals" role="button">Ver propostas</Link>
+                  <Link href="/proposals" role="button">View proposals</Link>
                   <button type="button" className="secondary" onClick={() => setShowSubmit(false)}>
-                    Continuar editando
+                    Keep editing
                   </button>
                 </footer>
               </>
             ) : (
               <>
                 <p style={{ fontSize: 13.5, color: "#6b6b68" }}>
-                  Descreva o que você mudou e por quê. Um admin vai revisar o antes/depois antes de
-                  publicar. Autor: <strong>{author}</strong>
+                  Describe what you changed and why. An admin will review the before/after before
+                  publishing. Author: <strong>{author}</strong>
                 </p>
                 <textarea
                   rows={4}
-                  placeholder="Ex.: Adicionei uma seção sobre entrevistas de dados e atualizei a matriz de avaliação."
+                  placeholder="e.g.: Added a section about data interviews and updated the evaluation matrix."
                   value={summary}
                   onChange={(e) => setSummary(e.target.value)}
                 />
@@ -407,10 +407,10 @@ export function EditorClient({ playbook: initial, author }: { playbook: Playbook
                 ) : null}
                 <footer>
                   <button type="button" className="secondary" onClick={() => setShowSubmit(false)}>
-                    Cancelar
+                    Cancel
                   </button>
                   <button type="button" disabled={submitting || summary.trim().length < 4} onClick={submit} aria-busy={submitting}>
-                    {submitting ? "Submetendo…" : "Submeter"}
+                    {submitting ? "Submitting…" : "Submit"}
                   </button>
                 </footer>
               </>
@@ -434,7 +434,7 @@ function SelectNavGroup({
   const current = draft.nav.findIndex((g) => g.pageIds.includes(pageId));
   return (
     <label>
-      Grupo de navegação
+      Navigation group
       <select value={current} onChange={(e) => onMove(Number(e.target.value))}>
         {draft.nav.map((g, i) => (
           <option key={i} value={i}>

@@ -5,10 +5,10 @@ export default function NotFound() {
     <div className="gh-login">
       <div className="gh-login-card">
         <div className="gh-login-logo">🌱</div>
-        <h1>Nada plantado aqui</h1>
-        <p>A página que você procura não existe (ou ainda não foi aprovada).</p>
+        <h1>Nothing planted here</h1>
+        <p>The page you are looking for does not exist (or has not been approved yet).</p>
         <Link href="/" role="button">
-          Voltar para a home
+          Back to home
         </Link>
       </div>
     </div>

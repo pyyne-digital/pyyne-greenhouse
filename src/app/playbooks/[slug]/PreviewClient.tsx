@@ -23,7 +23,7 @@ export function PreviewClient({ playbook }: { playbook: Playbook }) {
           ← Greenhouse
         </Link>
         <Link href={`/playbooks/${playbook.meta.slug}/edit`} role="button">
-          Editar este playbook
+          Edit this playbook
         </Link>
       </div>
       <PlaybookShell

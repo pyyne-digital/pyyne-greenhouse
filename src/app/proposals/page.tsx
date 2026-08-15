@@ -18,23 +18,23 @@ export default async function ProposalsPage() {
     <>
       <AppHeader />
       <main className="gh-container">
-        <h1 className="gh-page-title">Propostas</h1>
+        <h1 className="gh-page-title">Proposals</h1>
         <p className="gh-page-sub">
-          Mudanças sugeridas aguardando revisão. Admins revisam o antes/depois e aprovam; o deploy é
-          automático após o merge.
+          Suggested changes waiting for review. Admins review the before/after and approve;
+          deployment is automatic after the merge.
         </p>
 
         {!configured ? (
           <div className="gh-empty">
             <div className="gh-empty-icon">⚙️</div>
-            <h3>GitHub App não configurado</h3>
-            <p>Defina as variáveis GITHUB_APP_* no servidor para habilitar propostas.</p>
+            <h3>GitHub App not configured</h3>
+            <p>Set the GITHUB_APP_* variables on the server to enable proposals.</p>
           </div>
         ) : proposals.length === 0 ? (
           <div className="gh-empty">
             <div className="gh-empty-icon">🌿</div>
-            <h3>Nenhuma proposta aberta</h3>
-            <p>Quando alguém submeter uma mudança, ela aparece aqui.</p>
+            <h3>No open proposals</h3>
+            <p>When someone submits a change, it shows up here.</p>
           </div>
         ) : (
           proposals.map((p) => (
@@ -46,10 +46,10 @@ export default async function ProposalsPage() {
               <div className="gh-proposal-card">
                 <div>
                   <h3>
-                    {p.meta.type === "create" ? "Novo playbook: " : ""}
+                    {p.meta.type === "create" ? "New playbook: " : ""}
                     {p.meta.playbookTitle}
                     <span className={`gh-diff-tag ${p.meta.type === "create" ? "gh-diff-added" : "gh-diff-changed"}`}>
-                      {p.meta.type === "create" ? "criação" : "edição"}
+                      {p.meta.type === "create" ? "creation" : "edit"}
                     </span>
                   </h3>
                   <div className="gh-meta">
@@ -57,11 +57,11 @@ export default async function ProposalsPage() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={p.meta.author.avatar} alt="" referrerPolicy="no-referrer" />
                     ) : null}
-                    {p.meta.author.name} · {new Date(p.meta.createdAt).toLocaleDateString("pt-BR")}
+                    {p.meta.author.name} · {new Date(p.meta.createdAt).toLocaleDateString("en-US")}
                   </div>
                   <div className="gh-meta" style={{ marginTop: 4 }}>{p.meta.summary}</div>
                 </div>
-                <span style={{ fontSize: 13, color: "#679747", whiteSpace: "nowrap" }}>Revisar →</span>
+                <span style={{ fontSize: 13, color: "#679747", whiteSpace: "nowrap" }}>Review →</span>
               </div>
             </Link>
           ))

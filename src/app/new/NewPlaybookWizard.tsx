@@ -42,10 +42,10 @@ export function NewPlaybookWizard() {
         body: JSON.stringify({ type: "create", slug: effectiveSlug, content: playbook, summary }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Falha ao submeter");
+      if (!res.ok) throw new Error(data.error ?? "Submission failed");
       setResult({ url: data.url });
     } catch (e) {
-      setResult({ error: e instanceof Error ? e.message : "Erro desconhecido" });
+      setResult({ error: e instanceof Error ? e.message : "Unknown error" });
     } finally {
       setBusy(false);
     }
@@ -54,22 +54,22 @@ export function NewPlaybookWizard() {
   if (result && "url" in result) {
     return (
       <article>
-        <h3 style={{ fontSize: 18 }}>Playbook submetido 🌱</h3>
+        <h3 style={{ fontSize: 18 }}>Playbook submitted 🌱</h3>
         <p>
-          Sua proposta de novo playbook aguarda aprovação de um admin. Depois do merge, ele aparece
-          na home e ganha um site próprio no GitHub Pages.
+          Your new playbook proposal is waiting for an admin&apos;s approval. After the merge, it
+          shows up on the home page and gets its own site on GitHub Pages.
         </p>
         <p>
           <a href={result.url} target="_blank" rel="noreferrer">
-            Ver pull request no GitHub ↗
+            View pull request on GitHub ↗
           </a>
         </p>
         <footer>
           <Link href="/proposals" role="button">
-            Ver propostas
+            View proposals
           </Link>
           <Link href="/" role="button" className="secondary">
-            Voltar para a home
+            Back to home
           </Link>
         </footer>
       </article>
@@ -79,11 +79,11 @@ export function NewPlaybookWizard() {
   return (
     <article>
       <label>
-        Nome do playbook
+        Playbook name
         <input
           type="text"
           value={title}
-          placeholder="Ex.: Onboarding de Engenharia"
+          placeholder="e.g.: Engineering Onboarding"
           onChange={(e) => setTitle(e.target.value)}
         />
       </label>
@@ -97,32 +97,32 @@ export function NewPlaybookWizard() {
             setSlug(slugify(e.target.value));
           }}
         />
-        <small>Site público em: pyyne-digital.github.io/pyyne-greenhouse/{effectiveSlug || "…"}/</small>
+        <small>Public site at: pyyne-digital.github.io/pyyne-greenhouse/{effectiveSlug || "…"}/</small>
       </label>
       <label>
-        Descrição
+        Description
         <textarea
           rows={3}
           value={description}
-          placeholder="O que este playbook cobre e para quem ele é."
+          placeholder="What this playbook covers and who it is for."
           onChange={(e) => setDescription(e.target.value)}
         />
       </label>
       <label>
-        Tags (separadas por vírgula)
+        Tags (comma-separated)
         <input
           type="text"
           value={tags}
-          placeholder="Ex.: Engineering, Onboarding"
+          placeholder="e.g.: Engineering, Onboarding"
           onChange={(e) => setTags(e.target.value)}
         />
       </label>
       <label>
-        Resumo para os admins
+        Summary for the admins
         <textarea
           rows={3}
           value={summary}
-          placeholder="Por que este playbook deve existir?"
+          placeholder="Why should this playbook exist?"
           onChange={(e) => setSummary(e.target.value)}
         />
       </label>
@@ -130,7 +130,7 @@ export function NewPlaybookWizard() {
         <p style={{ color: "#A32D2D", fontSize: 13 }}>{result.error}</p>
       ) : null}
       <button type="button" disabled={!valid || busy} onClick={submit} aria-busy={busy}>
-        {busy ? "Submetendo…" : "Submeter para aprovação"}
+        {busy ? "Submitting…" : "Submit for approval"}
       </button>
     </article>
   );

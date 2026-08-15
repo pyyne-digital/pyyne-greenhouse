@@ -2,7 +2,7 @@
   "name": "pyyne-greenhouse",
   "version": "0.1.0",
   "private": true,
-  "description": "Pyyne Greenhouse — visual editor for Pyyne playbooks",
+  "description": "Pyyne Greenhouse — visual editor for Pyyne playbooks. Where ideas are planted, matured, and grow into playbooks.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

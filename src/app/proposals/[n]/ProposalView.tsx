@@ -76,11 +76,11 @@ export function ProposalView({
         body: action === "reject" ? JSON.stringify({ reason }) : undefined,
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Falha");
+      if (!res.ok) throw new Error(data.error ?? "Request failed");
       setDone(action === "approve" ? "approved" : "rejected");
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Erro desconhecido");
+      setError(e instanceof Error ? e.message : "Unknown error");
     } finally {
       setBusy(false);
     }
@@ -99,7 +99,7 @@ export function ProposalView({
           </span>
         </Link>
         <nav className="gh-app-nav">
-          <Link href="/proposals">← Propostas</Link>
+          <Link href="/proposals">← Proposals</Link>
           <a href={url} target="_blank" rel="noreferrer">
             PR #{number} ↗
           </a>
@@ -108,7 +108,7 @@ export function ProposalView({
 
       <main className="gh-container">
         <h1 className="gh-page-title" style={{ fontSize: 26 }}>
-          {meta.type === "create" ? "Novo playbook: " : "Mudanças em "}
+          {meta.type === "create" ? "New playbook: " : "Changes to "}
           {meta.playbookTitle}
         </h1>
         <p className="gh-page-sub" style={{ marginBottom: 12 }}>
@@ -122,7 +122,7 @@ export function ProposalView({
             />
           ) : null}
           <strong>{meta.author.name}</strong> ({meta.author.email}) ·{" "}
-          {new Date(meta.createdAt).toLocaleString("pt-BR")}
+          {new Date(meta.createdAt).toLocaleString("en-US")}
         </p>
         <p style={{ fontSize: 14, marginBottom: 24 }}>
           <em>“{meta.summary}”</em>
@@ -131,18 +131,18 @@ export function ProposalView({
         {done ? (
           <div className={`pb-alert ${done === "approved" ? "pb-alert-success" : "pb-alert-warning"}`} style={{ display: "block", padding: 16 }}>
             {done === "approved"
-              ? "Proposta aprovada e mergeada. O deploy no GitHub Pages roda automaticamente."
-              : "Proposta rejeitada. O PR foi fechado com o motivo registrado."}
+              ? "Proposal approved and merged. Deployment to GitHub Pages runs automatically."
+              : "Proposal rejected. The PR was closed with the reason recorded."}
           </div>
         ) : null}
 
         {userIsAdmin && state === "open" && !done ? (
           <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
             <button type="button" onClick={() => act("approve")} disabled={busy} aria-busy={busy}>
-              Aprovar e publicar
+              Approve and publish
             </button>
             <button type="button" className="secondary" onClick={() => setRejecting((v) => !v)} disabled={busy}>
-              Rejeitar
+              Reject
             </button>
           </div>
         ) : null}
@@ -151,12 +151,12 @@ export function ProposalView({
           <div style={{ marginBottom: 28 }}>
             <textarea
               rows={3}
-              placeholder="Motivo da rejeição (visível para o autor)"
+              placeholder="Reason for rejection (visible to the author)"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
             />
             <button type="button" onClick={() => act("reject")} disabled={busy || reason.trim().length < 4}>
-              Confirmar rejeição
+              Confirm rejection
             </button>
           </div>
         ) : null}
@@ -164,15 +164,15 @@ export function ProposalView({
         {error ? <p style={{ color: "#A32D2D", fontSize: 13, marginBottom: 16 }}>{error}</p> : null}
         {state !== "open" ? (
           <p style={{ fontSize: 13, color: "#6b6b68", marginBottom: 16 }}>
-            Estado do PR: {merged ? "mergeado" : state}
+            PR state: {merged ? "merged" : state}
           </p>
         ) : null}
 
-        {!diff.changed ? <p>Nenhuma diferença de conteúdo detectada.</p> : null}
+        {!diff.changed ? <p>No content differences detected.</p> : null}
 
         {diff.metaChanges.length > 0 ? (
           <section className="gh-diff-block">
-            <h4>Metadados <span className="gh-diff-tag gh-diff-changed">alterado</span></h4>
+            <h4>Metadata <span className="gh-diff-tag gh-diff-changed">changed</span></h4>
             {diff.metaChanges.map((c, i) => (
               <FieldChangeView key={i} change={c} />
             ))}
@@ -181,7 +181,7 @@ export function ProposalView({
 
         {diff.themeChanges.length > 0 ? (
           <section className="gh-diff-block">
-            <h4>Tema <span className="gh-diff-tag gh-diff-changed">alterado</span></h4>
+            <h4>Theme <span className="gh-diff-tag gh-diff-changed">changed</span></h4>
             {diff.themeChanges.map((c, i) => (
               <div className="gh-diff-field" key={i}>
                 <code>{c.path}</code>
@@ -189,11 +189,11 @@ export function ProposalView({
                   {/^#([0-9a-fA-F]{6})$/.test(c.before) ? (
                     <span style={{ width: 14, height: 14, borderRadius: 4, background: c.before, border: "1px solid rgba(0,0,0,.1)" }} />
                   ) : null}
-                  <del style={{ color: "#A32D2D" }}>{c.before || "(vazio)"}</del> →{" "}
+                  <del style={{ color: "#A32D2D" }}>{c.before || "(empty)"}</del> →{" "}
                   {/^#([0-9a-fA-F]{6})$/.test(c.after) ? (
                     <span style={{ width: 14, height: 14, borderRadius: 4, background: c.after, border: "1px solid rgba(0,0,0,.1)" }} />
                   ) : null}
-                  <ins style={{ color: "#35521f", textDecoration: "none" }}>{c.after || "(vazio)"}</ins>
+                  <ins style={{ color: "#35521f", textDecoration: "none" }}>{c.after || "(empty)"}</ins>
                 </span>
               </div>
             ))}
@@ -202,10 +202,10 @@ export function ProposalView({
 
         {diff.navChanged ? (
           <section className="gh-diff-block">
-            <h4>Navegação <span className="gh-diff-tag gh-diff-changed">alterada</span></h4>
+            <h4>Navigation <span className="gh-diff-tag gh-diff-changed">changed</span></h4>
             <p style={{ fontSize: 13, color: "#6b6b68" }}>
-              A ordem/agrupamento das páginas mudou. Antes:{" "}
-              {before?.nav.map((g) => `${g.group} [${g.pageIds.join(", ")}]`).join(" · ") ?? "—"} · Depois:{" "}
+              Page order/grouping changed. Before:{" "}
+              {before?.nav.map((g) => `${g.group} [${g.pageIds.join(", ")}]`).join(" · ") ?? "—"} · After:{" "}
               {after.nav.map((g) => `${g.group} [${g.pageIds.join(", ")}]`).join(" · ")}
             </p>
           </section>
@@ -216,21 +216,21 @@ export function ProposalView({
             {pc.kind === "added" ? (
               <>
                 <h4>
-                  Página “{pc.page.label}” <span className="gh-diff-tag gh-diff-added">nova</span>
+                  Page “{pc.page.label}” <span className="gh-diff-tag gh-diff-added">new</span>
                 </h4>
                 <PagePreview playbook={after} pageId={pc.page.id} />
               </>
             ) : pc.kind === "removed" ? (
               <>
                 <h4>
-                  Página “{pc.page.label}” <span className="gh-diff-tag gh-diff-removed">removida</span>
+                  Page “{pc.page.label}” <span className="gh-diff-tag gh-diff-removed">removed</span>
                 </h4>
-                <p style={{ fontSize: 13, color: "#6b6b68" }}>A página inteira será removida.</p>
+                <p style={{ fontSize: 13, color: "#6b6b68" }}>The entire page will be removed.</p>
               </>
             ) : pc.kind === "changed" ? (
               <>
                 <h4>
-                  Página “{pc.label}” <span className="gh-diff-tag gh-diff-changed">alterada</span>
+                  Page “{pc.label}” <span className="gh-diff-tag gh-diff-changed">changed</span>
                 </h4>
                 {pc.fieldChanges.map((c, i) => (
                   <FieldChangeView key={i} change={c} />
@@ -240,7 +240,7 @@ export function ProposalView({
                     {bc.kind === "added" ? (
                       <>
                         <h4>
-                          Bloco <code>{bc.block.type}</code> <span className="gh-diff-tag gh-diff-added">novo</span>
+                          Block <code>{bc.block.type}</code> <span className="gh-diff-tag gh-diff-added">new</span>
                         </h4>
                         <div style={themeToCssVars(after.theme) as React.CSSProperties} className="pb-root">
                           <BlockView block={bc.block} />
@@ -249,7 +249,7 @@ export function ProposalView({
                     ) : bc.kind === "removed" ? (
                       <>
                         <h4>
-                          Bloco <code>{bc.block.type}</code> <span className="gh-diff-tag gh-diff-removed">removido</span>
+                          Block <code>{bc.block.type}</code> <span className="gh-diff-tag gh-diff-removed">removed</span>
                         </h4>
                         <div
                           style={{ ...(themeToCssVars(before?.theme ?? after.theme) as React.CSSProperties), opacity: 0.6 }}
@@ -260,13 +260,13 @@ export function ProposalView({
                       </>
                     ) : bc.kind === "moved" ? (
                       <p style={{ fontSize: 13 }}>
-                        Bloco <code>{bc.blockType}</code> moveu da posição {bc.from + 1} para {bc.to + 1}.{" "}
-                        <span className="gh-diff-tag gh-diff-moved">movido</span>
+                        Block <code>{bc.blockType}</code> moved from position {bc.from + 1} to {bc.to + 1}.{" "}
+                        <span className="gh-diff-tag gh-diff-moved">moved</span>
                       </p>
                     ) : (
                       <>
                         <h4>
-                          Bloco <code>{bc.blockType}</code> <span className="gh-diff-tag gh-diff-changed">alterado</span>
+                          Block <code>{bc.blockType}</code> <span className="gh-diff-tag gh-diff-changed">changed</span>
                         </h4>
                         {bc.fields.map((f, j) => (
                           <FieldChangeView key={j} change={f} />
