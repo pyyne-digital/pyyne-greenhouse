@@ -1,4 +1,5 @@
-import { auth, signIn } from "@/lib/auth";
+import { signIn } from "@/lib/auth";
+import { getSession, isAuthBypassed } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export default async function LoginPage({
@@ -6,8 +7,12 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ callbackUrl?: string; error?: string }>;
 }) {
-  const session = await auth();
   const params = await searchParams;
+
+  // Auth bypass active: no login screen, straight to the app.
+  if (isAuthBypassed()) redirect(params.callbackUrl ?? "/");
+
+  const session = await getSession();
   if (session?.user) redirect(params.callbackUrl ?? "/");
 
   return (

@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { auth, signOut } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
+import { getSession, isAuthBypassed } from "@/lib/session";
 
 export async function AppHeader() {
-  const session = await auth();
+  const session = await getSession();
   const user = session?.user;
+  const bypass = isAuthBypassed();
 
   return (
     <header className="gh-app-header">
@@ -26,17 +28,23 @@ export async function AppHeader() {
             ) : null}
             {user.name}
             {user.isAdmin ? <span className="gh-admin-badge">admin</span> : null}
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/login" });
-              }}
-              style={{ display: "inline" }}
-            >
-              <button type="submit" className="gh-icon-btn" style={{ fontSize: 12 }}>
-                Sign out
-              </button>
-            </form>
+            {bypass ? (
+              <span className="gh-admin-badge" style={{ background: "#FAEEDA", color: "#854F0B", borderColor: "#FAC775" }}>
+                bypass
+              </span>
+            ) : (
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut({ redirectTo: "/login" });
+                }}
+                style={{ display: "inline" }}
+              >
+                <button type="submit" className="gh-icon-btn" style={{ fontSize: 12 }}>
+                  Sign out
+                </button>
+              </form>
+            )}
           </span>
         ) : (
           <Link href="/login">Sign in</Link>

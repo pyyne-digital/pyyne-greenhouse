@@ -163,7 +163,11 @@ npm run build:site   # generates the static site in out/
 npm run typecheck    # type checking
 ```
 
-Without the GitHub App env vars, the app runs in local mode: it reads `content/playbooks/*.json` from disk and the "Submit" button returns 503. Auth requires the Google env vars.
+Without the GitHub App env vars, the app runs in local mode: it reads `content/playbooks/*.json` from disk and the "Submit" button returns 503.
+
+### Auth bypass (current default)
+
+While `AUTH_GOOGLE_ID` is unset, the app runs in **auth bypass mode**: everyone is automatically signed in as the first admin from `content/admins.json` (shown as "Dev (auth bypass)" with a `bypass` badge in the header), and all routes are open. As soon as the Google credentials are configured, real OAuth takes over with no code change. Force a mode explicitly with `AUTH_BYPASS=true|false`.
 
 ## Production setup (one time)
 
