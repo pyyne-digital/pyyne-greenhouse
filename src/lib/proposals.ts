@@ -172,6 +172,43 @@ export async function mergeProposal(number: number, approverEmail: string) {
   });
 }
 
+export interface ProposalComment {
+  id: number;
+  author: string;
+  avatar?: string;
+  body: string;
+  createdAt: string;
+}
+
+export async function listComments(number: number): Promise<ProposalComment[]> {
+  const octokit = await getOctokit();
+  const { data } = await octokit.issues.listComments({
+    owner: REPO_OWNER,
+    repo: REPO_NAME,
+    issue_number: number,
+    per_page: 100,
+  });
+  return data
+    .filter((c) => !c.body?.startsWith("<!-- greenhouse"))
+    .map((c) => ({
+      id: c.id,
+      author: c.user?.login ?? "unknown",
+      avatar: c.user?.avatar_url,
+      body: c.body ?? "",
+      createdAt: c.created_at,
+    }));
+}
+
+export async function addComment(number: number, body: string) {
+  const octokit = await getOctokit();
+  await octokit.issues.createComment({
+    owner: REPO_OWNER,
+    repo: REPO_NAME,
+    issue_number: number,
+    body,
+  });
+}
+
 export async function rejectProposal(number: number, approverEmail: string, reason: string) {
   const octokit = await getOctokit();
   await octokit.issues.createComment({

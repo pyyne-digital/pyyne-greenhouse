@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { Block, BlockOf, Card } from "@playbook/index";
-import { ColorField, IconField, SelectField, StringListField, TextField } from "@/components/fields";
+import { ColorField, IconField, SelectField, StringListField, TextField, iconBtn, listRow } from "@/components/fields";
 
 type Update = (mutate: (props: never) => void) => void;
 
@@ -104,7 +104,7 @@ function CardGridInspector({ block, update }: { block: BlockOf<"cardGrid">; upda
             <CardFields card={c} onChange={(nc) => setCard(i, nc)} />
             <button
               type="button"
-              className="gh-icon-btn"
+              className={iconBtn}
               onClick={() => p((x) => x.cards.splice(i, 1))}
             >
               Remove card
@@ -114,7 +114,7 @@ function CardGridInspector({ block, update }: { block: BlockOf<"cardGrid">; upda
       ))}
       <button
         type="button"
-        className="gh-icon-btn"
+        className={iconBtn}
         onClick={() =>
           p((x) => x.cards.push({ icon: "book", iconColor: "teal", title: "New card", items: ["Item"] }))
         }
@@ -208,7 +208,7 @@ export function BlockInspector({
                   onChange={(v) => p((x) => (x.items[i].badgeColor = v as never))}
                 />
                 <TextField label="Text" multiline value={t.body} onChange={(v) => p((x) => (x.items[i].body = v))} />
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.items.splice(i, 1))}>
                   Remove step
                 </button>
               </div>
@@ -216,7 +216,7 @@ export function BlockInspector({
           ))}
           <button
             type="button"
-            className="gh-icon-btn"
+            className={iconBtn}
             onClick={() => p((x) => x.items.push({ label: "Step", badgeText: "", badgeColor: "gray", body: "" }))}
           >
             + Add step
@@ -231,7 +231,7 @@ export function BlockInspector({
       return (
         <>
           {b.props.items.map((pill, i) => (
-            <div className="gh-field-list-item" key={i}>
+            <div className={listRow} key={i}>
               <input type="text" value={pill.text} onChange={(e) => p((x) => (x.items[i].text = e.target.value))} style={{ flex: 1 }} />
               <select
                 value={pill.color}
@@ -244,12 +244,12 @@ export function BlockInspector({
                   </option>
                 ))}
               </select>
-              <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.splice(i, 1))}>
+              <button type="button" className={iconBtn} onClick={() => p((x) => x.items.splice(i, 1))}>
                 ✕
               </button>
             </div>
           ))}
-          <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.push({ text: "Pill", color: "teal" }))}>
+          <button type="button" className={iconBtn} onClick={() => p((x) => x.items.push({ text: "Pill", color: "teal" }))}>
             + Add pill
           </button>
         </>
@@ -277,13 +277,13 @@ export function BlockInspector({
               <div style={{ padding: "8px 0 8px 12px", borderLeft: "2px solid #eef4e8" }}>
                 <TextField label="Author" value={e.author} onChange={(v) => p((x) => (x.entries[i].author = v))} />
                 <TextField label="Text" multiline value={e.text} onChange={(v) => p((x) => (x.entries[i].text = v))} />
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.entries.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.entries.splice(i, 1))}>
                   Remove
                 </button>
               </div>
             </details>
           ))}
-          <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.entries.push({ author: "", text: "" }))}>
+          <button type="button" className={iconBtn} onClick={() => p((x) => x.entries.push({ author: "", text: "" }))}>
             + Add entry
           </button>
         </>
@@ -324,7 +324,7 @@ export function BlockInspector({
                     onChange={(v) => p((x) => (x.rows[i][j] = v))}
                   />
                 ))}
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.rows.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.rows.splice(i, 1))}>
                   Remove row
                 </button>
               </div>
@@ -332,7 +332,7 @@ export function BlockInspector({
           ))}
           <button
             type="button"
-            className="gh-icon-btn"
+            className={iconBtn}
             onClick={() => p((x) => x.rows.push(x.columns.map(() => "")))}
           >
             + Add row
@@ -354,13 +354,13 @@ export function BlockInspector({
                 <TextField label="Word" value={l.word} onChange={(v) => p((x) => (x.items[i].word = v))} />
                 <TextField label="Question" value={l.question ?? ""} onChange={(v) => p((x) => (x.items[i].question = v))} />
                 <TextField label="What to look for" multiline value={l.look ?? ""} onChange={(v) => p((x) => (x.items[i].look = v))} />
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.items.splice(i, 1))}>
                   Remove
                 </button>
               </div>
             </details>
           ))}
-          <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.push({ letter: "?", word: "New", question: "", look: "" }))}>
+          <button type="button" className={iconBtn} onClick={() => p((x) => x.items.push({ letter: "?", word: "New", question: "", look: "" }))}>
             + Add letter
           </button>
         </>
@@ -379,13 +379,13 @@ export function BlockInspector({
               <div style={{ padding: "8px 0 8px 12px", borderLeft: "2px solid #eef4e8" }}>
                 <TextField label="Question" multiline value={e.q} onChange={(v) => p((x) => (x.items[i].q = v))} />
                 <TextField label="Reveals" multiline value={e.why} onChange={(v) => p((x) => (x.items[i].why = v))} />
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.items.splice(i, 1))}>
                   Remove
                 </button>
               </div>
             </details>
           ))}
-          <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.push({ q: "", why: "" }))}>
+          <button type="button" className={iconBtn} onClick={() => p((x) => x.items.push({ q: "", why: "" }))}>
             + Add question
           </button>
         </>
@@ -406,13 +406,13 @@ export function BlockInspector({
                 <TextField label="Title" value={f.title} onChange={(v) => p((x) => (x.items[i].title = v))} />
                 <TextField label="Description" multiline value={f.desc} onChange={(v) => p((x) => (x.items[i].desc = v))} />
                 <TextField label="Note (italic)" multiline value={f.note} onChange={(v) => p((x) => (x.items[i].note = v))} />
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.items.splice(i, 1))}>
                   Remove
                 </button>
               </div>
             </details>
           ))}
-          <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.items.push({ dotColor: "#679747", title: "", desc: "", note: "" }))}>
+          <button type="button" className={iconBtn} onClick={() => p((x) => x.items.push({ dotColor: "#679747", title: "", desc: "", note: "" }))}>
             + Add format
           </button>
         </>
@@ -442,7 +442,7 @@ export function BlockInspector({
                   items={e.changes}
                   onChange={(items) => p((x) => (x.entries[i].changes = items))}
                 />
-                <button type="button" className="gh-icon-btn" onClick={() => p((x) => x.entries.splice(i, 1))}>
+                <button type="button" className={iconBtn} onClick={() => p((x) => x.entries.splice(i, 1))}>
                   Remove entry
                 </button>
               </div>
@@ -450,7 +450,7 @@ export function BlockInspector({
           ))}
           <button
             type="button"
-            className="gh-icon-btn"
+            className={iconBtn}
             onClick={() =>
               p((x) =>
                 x.entries.unshift({

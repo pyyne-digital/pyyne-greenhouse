@@ -20,8 +20,11 @@ Pyyne's visual playbook editor: anyone with a `@pyyne.com` Google account can su
 
 | Technology | Version | What it is used for |
 |---|---|---|
-| [Pico CSS](https://picocss.com) | `^2.0` | Editor chrome only. Styles semantic HTML (forms, tables, buttons, dialogs) with almost no classes. Customizations live in `src/app/globals.css`. |
-| Custom design system | — | The playbook look itself lives in `shared/playbook/playbook.css` (ported from the original playbook). It is driven by CSS custom properties (`--brand`, `--ink`, …) injected per playbook from the JSON `theme` object — independent of Pico. |
+| [Tailwind CSS](https://tailwindcss.com) v4 | `^4` | All app screens. Brand tokens live in the `@theme` block of `src/app/globals.css` (forest/sage/leaf/moss palette, Outfit/Newsreader/JetBrains Mono fonts). |
+| Custom design system | — | The playbook content look lives in `shared/playbook/playbook.css` (`.pb-*` classes), driven by CSS custom properties injected per playbook from the JSON `theme` object. Shared by the app preview and the static site. |
+| [Phosphor Icons](https://phosphoricons.com) | `^2` | UI icons via `<PhIcon name="…">` (web font, regular weight). |
+
+**Style organization (project convention):** class strings live outside components, in `src/styles/` — `tokens.ts` (colors/fonts for JS use), `ui.ts` (shared primitives: buttons, inputs, badges, diff text), and one file per screen (`home.ts`, `shell.ts`, `editor.ts`, `proposals.ts`, `history.ts`, `standalone.ts`). Components import constants (`className={home.statCard}`) instead of inline class soup.
 
 ### Data, auth and integrations
 
@@ -67,26 +70,31 @@ flowchart LR
 ```
 ├── src/
 │   ├── app/                      # Next.js App Router
-│   │   ├── page.tsx              # Home: playbook list
+│   │   ├── page.tsx              # Home: "The Archive" — playbook gallery
 │   │   ├── login/                # Google sign-in screen
-│   │   ├── new/                  # New-playbook wizard (goes through approval too)
-│   │   ├── playbooks/[slug]/     # Public preview of a playbook
-│   │   │   └── edit/             # Visual editor (client) + BlockInspector forms
+│   │   ├── new/                  # New-playbook wizard → /new/editor (create mode)
+│   │   ├── playbooks/[slug]/     # Playbook preview (PlaybookShell)
+│   │   │   ├── edit/             # Visual editor (canvas + structure + changelog panel)
+│   │   │   └── history/          # Version history + /[n] snapshot detail
 │   │   ├── proposals/            # Proposal list
-│   │   │   └── [n]/              # Before/after review screen (ProposalView)
+│   │   │   └── [n]/              # Before/after review + discussion (ProposalView)
 │   │   └── api/
 │   │       ├── auth/[...nextauth]/  # Auth.js handler
-│   │       └── proposals/        # GET/POST list+create, [n]/approve, [n]/reject
+│   │       └── proposals/        # GET/POST list+create, [n]/approve, [n]/reject, [n]/comment
 │   ├── lib/
 │   │   ├── auth.ts               # Auth.js v5 config (Google, pyyne.com check, isAdmin in JWT)
+│   │   ├── session.ts            # getSession + auth bypass (dev mode without Google creds)
 │   │   ├── guards.ts             # requireUser / requireAdmin for pages and API routes
 │   │   ├── admins.ts             # Reads content/admins.json (bundled via static import)
 │   │   ├── github.ts             # GitHub App → authenticated Octokit client
 │   │   ├── content.ts            # Playbook reads: GitHub Contents API in prod, fs in dev
-│   │   └── proposals.ts          # PR lifecycle: create branch+PR, list, merge, reject
+│   │   ├── proposals.ts          # PR lifecycle: create branch+PR, list, merge, reject, comments
+│   │   ├── history.ts            # Version history (merged PRs) + snapshots at a commit
+│   │   └── time.ts               # timeAgo helper
 │   ├── auth.config.ts            # Edge-safe Auth.js subset used by middleware (no node:fs)
 │   ├── middleware.ts             # Protects /edit, /proposals, /new, /api/proposals
-│   └── components/               # AppHeader, form field primitives (fields.tsx)
+│   ├── components/               # shell (AppShell/AppSidebar/NavLink), home/, brand/, fields.tsx
+│   └── styles/                   # Class constants per screen (Tailwind) — see convention above
 │
 ├── shared/playbook/              # THE HEART — shared by the app AND the static build
 │   ├── schema.ts                 # zod schemas: Playbook, Page, Block (discriminated union), Theme

@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { diffPlaybooks } from "@playbook/index";
 import { requireUser } from "@/lib/guards";
 import { isAdmin } from "@/lib/admins";
-import { getProposal } from "@/lib/proposals";
+import { getProposal, listComments } from "@/lib/proposals";
 import { ProposalView } from "./ProposalView";
 
 export const dynamic = "force-dynamic";
@@ -15,9 +15,11 @@ export default async function ProposalPage({ params }: { params: Promise<{ n: st
   const proposal = await getProposal(Number(n)).catch(() => null);
   if (!proposal || !proposal.after) notFound();
 
-  const diff = diffPlaybooks(proposal.before, proposal.after);
-  const userEmail = session.user!.email!;
-  const userIsAdmin = isAdmin(userEmail);
+  const [diff, comments] = await Promise.all([
+    Promise.resolve(diffPlaybooks(proposal.before, proposal.after)),
+    listComments(proposal.number).catch(() => []),
+  ]);
+  const userIsAdmin = isAdmin(session.user!.email!);
 
   return (
     <ProposalView
@@ -29,7 +31,9 @@ export default async function ProposalPage({ params }: { params: Promise<{ n: st
       before={proposal.before}
       after={proposal.after}
       diff={diff}
+      comments={comments}
       userIsAdmin={userIsAdmin}
+      currentUserName={session.user!.name ?? session.user!.email!}
     />
   );
 }

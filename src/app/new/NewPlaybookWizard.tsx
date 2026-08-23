@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { createPlaybook } from "@playbook/index";
+import { useRouter, useSearchParams } from "next/navigation";
+import { PyyneLogo } from "@/components/brand/PyyneLogo";
+import { PhIcon } from "@/components/Icon";
+import { standalone as st } from "@/styles/standalone";
+import { ui } from "@/styles/ui";
 
 function slugify(s: string): string {
   return s
@@ -14,124 +18,102 @@ function slugify(s: string): string {
 }
 
 export function NewPlaybookWizard() {
-  const [title, setTitle] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [title, setTitle] = useState(searchParams.get("title") ?? "");
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(searchParams.get("description") ?? "");
   const [tags, setTags] = useState("");
-  const [summary, setSummary] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [result, setResult] = useState<{ url: string } | { error: string } | null>(null);
 
   const effectiveSlug = slugTouched ? slug : slugify(title);
-  const valid = title.trim().length >= 3 && effectiveSlug.length >= 2 && description.trim().length >= 10 && summary.trim().length >= 4;
+  const valid = title.trim().length >= 3 && effectiveSlug.length >= 2 && description.trim().length >= 10;
 
-  async function submit() {
-    setBusy(true);
-    setResult(null);
-    try {
-      const playbook = createPlaybook({
-        slug: effectiveSlug,
-        title: title.trim(),
-        description: description.trim(),
-        tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-      });
-      const res = await fetch("/api/proposals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type: "create", slug: effectiveSlug, content: playbook, summary }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Submission failed");
-      setResult({ url: data.url });
-    } catch (e) {
-      setResult({ error: e instanceof Error ? e.message : "Unknown error" });
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  if (result && "url" in result) {
-    return (
-      <article>
-        <h3 style={{ fontSize: 18 }}>Playbook submitted 🌱</h3>
-        <p>
-          Your new playbook proposal is waiting for an admin&apos;s approval. After the merge, it
-          shows up on the home page and gets its own site on GitHub Pages.
-        </p>
-        <p>
-          <a href={result.url} target="_blank" rel="noreferrer">
-            View pull request on GitHub ↗
-          </a>
-        </p>
-        <footer>
-          <Link href="/proposals" role="button">
-            View proposals
-          </Link>
-          <Link href="/" role="button" className="secondary">
-            Back to home
-          </Link>
-        </footer>
-      </article>
-    );
+  function plant() {
+    const params = new URLSearchParams({
+      title: title.trim(),
+      slug: effectiveSlug,
+      description: description.trim(),
+      tags,
+    });
+    router.push(`/new/editor?${params.toString()}`);
   }
 
   return (
-    <article>
-      <label>
-        Playbook name
-        <input
-          type="text"
-          value={title}
-          placeholder="e.g.: Engineering Onboarding"
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </label>
-      <label>
-        Slug (URL)
-        <input
-          type="text"
-          value={effectiveSlug}
-          onChange={(e) => {
-            setSlugTouched(true);
-            setSlug(slugify(e.target.value));
-          }}
-        />
-        <small>Public site at: pyyne-digital.github.io/pyyne-greenhouse/{effectiveSlug || "…"}/</small>
-      </label>
-      <label>
-        Description
-        <textarea
-          rows={3}
-          value={description}
-          placeholder="What this playbook covers and who it is for."
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </label>
-      <label>
-        Tags (comma-separated)
-        <input
-          type="text"
-          value={tags}
-          placeholder="e.g.: Engineering, Onboarding"
-          onChange={(e) => setTags(e.target.value)}
-        />
-      </label>
-      <label>
-        Summary for the admins
-        <textarea
-          rows={3}
-          value={summary}
-          placeholder="Why should this playbook exist?"
-          onChange={(e) => setSummary(e.target.value)}
-        />
-      </label>
-      {result && "error" in result ? (
-        <p style={{ color: "#A32D2D", fontSize: 13 }}>{result.error}</p>
-      ) : null}
-      <button type="button" disabled={!valid || busy} onClick={submit} aria-busy={busy}>
-        {busy ? "Submitting…" : "Submit for approval"}
-      </button>
-    </article>
+    <div className={st.page}>
+      <div className={st.column}>
+        <div className={st.brandBlock}>
+          <PyyneLogo className="w-16 h-16 mx-auto mb-6" />
+          <h1 className={st.brandTitle}>Cultivate ideas and routines into a standard process</h1>
+          <p className={st.brandSub}>Bring structure to the Pyyne collective intelligence.</p>
+        </div>
+
+        <div className={st.formCard}>
+          <div className={st.field}>
+            <label className={ui.inputLabel}>Playbook Title</label>
+            <input
+              type="text"
+              placeholder="e.g. Consultants Playbook"
+              className={st.titleInput}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div className={st.field}>
+            <label className={ui.inputLabel}>Slug</label>
+            <div className={st.slugRow}>
+              <span className={st.slugPrefix}>pyyne.com/</span>
+              <input
+                type="text"
+                placeholder="consultants-playbook"
+                className={st.slugInput}
+                value={effectiveSlug}
+                onChange={(e) => {
+                  setSlugTouched(true);
+                  setSlug(slugify(e.target.value));
+                }}
+              />
+            </div>
+          </div>
+
+          <div className={st.field}>
+            <label className={ui.inputLabel}>Initial Scope</label>
+            <textarea
+              rows={3}
+              placeholder="What does this document instrument? What is in/out of scope?"
+              className={`${ui.input} resize-none`}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          <div className={st.field}>
+            <label className={ui.inputLabel}>Tags (comma-separated)</label>
+            <input
+              type="text"
+              placeholder="e.g.: Engineering, Onboarding"
+              className={ui.input}
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+            />
+          </div>
+
+          <div className={st.actionRow}>
+            <button type="button" className={ui.btnPrimaryLarge} disabled={!valid} onClick={plant}>
+              Plant Playbook
+              <PhIcon name="arrow-right" className="font-bold" />
+            </button>
+            <Link href="/" className={st.cancelBtn}>
+              Cancel
+            </Link>
+          </div>
+        </div>
+
+        <p className={st.footnote}>
+          <PhIcon name="shield-check" className="text-base" /> Pyyne Internal Governance Standard
+        </p>
+      </div>
+    </div>
   );
 }

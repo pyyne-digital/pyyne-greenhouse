@@ -20,7 +20,7 @@ const OUT_DIR = join(ROOT, "out");
 const BASE_PATH = process.env.PAGES_BASE_PATH ?? "";
 
 const FONTS_URL =
-  "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&family=DM+Mono:wght@400;500&display=swap";
+  "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=JetBrains+Mono:wght@400;500&display=swap";
 
 const NAV_SCRIPT = `
 (function () {
@@ -32,7 +32,8 @@ const NAV_SCRIPT = `
       el.classList.toggle('active', el.getAttribute('data-section') === id);
     });
     document.querySelector('.pb-sidebar').classList.remove('open');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    var main = document.querySelector('.pb-main');
+    if (main) main.scrollTo({ top: 0, behavior: 'smooth' }); else window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   document.addEventListener('click', function (e) {
     var a = e.target.closest('.pb-nav-item');
@@ -73,15 +74,8 @@ function loadPlaybooks(): Playbook[] {
 }
 
 function renderPlaybookPage(p: Playbook): string {
-  const markup = renderToStaticMarkup(
-    React.createElement(PlaybookShell, {
-      playbook: p,
-      logoSrc: `${BASE_PATH}/assets/pyyne-logo.svg`,
-    })
-  );
-  const html = htmlDocument(`Pyyne · ${p.meta.title}`, markup);
-  // Playbook root must carry the data-section pages visibility styles per theme
-  return html.replace("</head>", `  <style>${""}</style>\n</head>`);
+  const markup = renderToStaticMarkup(React.createElement(PlaybookShell, { playbook: p }));
+  return htmlDocument(`Pyyne · ${p.meta.title}`, markup);
 }
 
 function renderIndex(playbooks: Playbook[]): string {
@@ -89,14 +83,16 @@ function renderIndex(playbooks: Playbook[]): string {
     .map(
       (p) => `
       <a class="gh-card" href="${BASE_PATH}/${p.meta.slug}/">
-        <div class="gh-card-top">
-          <span class="gh-favicon">${p.meta.favicon}</span>
-          <span class="gh-version">${p.meta.version}</span>
+        <div class="gh-card-hero"><h2>${p.meta.title}</h2></div>
+        <div class="gh-card-body">
+          <div class="gh-card-top">
+            <span class="gh-favicon">${p.meta.favicon}</span>
+            <span class="gh-version">${p.meta.version}</span>
+          </div>
+          <p>${p.meta.description}</p>
+          <div class="gh-tags">${p.meta.tags.map((t) => `<span>${t}</span>`).join("")}</div>
+          <p class="gh-updated">Updated ${p.meta.lastUpdated}</p>
         </div>
-        <h2>${p.meta.title}</h2>
-        <p>${p.meta.description}</p>
-        <div class="gh-tags">${p.meta.tags.map((t) => `<span>${t}</span>`).join("")}</div>
-        <p class="gh-updated">Updated ${p.meta.lastUpdated}</p>
       </a>`
     )
     .join("");
@@ -119,25 +115,27 @@ function renderIndex(playbooks: Playbook[]): string {
 
   const css = `
   <style>
-    body { font-family: 'DM Sans', system-ui, sans-serif; background: #f8f7f4; color: #111110; margin: 0; }
-    .gh-header { background: #fff; border-bottom: 1px solid rgba(0,0,0,.08); padding: 0 24px; height: 56px; display: flex; align-items: center; }
+    body { font-family: 'Outfit', system-ui, sans-serif; background: #fcfcf9; color: #1a1a1a; margin: 0; }
+    .gh-header { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 0 24px; height: 56px; display: flex; align-items: center; }
     .gh-brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
-    .gh-brand img { display: block; background: #111; border-radius: 6px; padding: 5px; box-sizing: content-box; width: 16px; height: 18px; }
-    .gh-brand em { color: #6b6b68; font-style: normal; font-weight: 400; }
+    .gh-brand img { display: block; border-radius: 6px; width: 20px; height: 20px; }
+    .gh-brand em { color: #666666; font-style: normal; font-weight: 400; }
     .gh-main { max-width: 960px; margin: 0 auto; padding: 64px 24px; }
-    .gh-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #679747; margin-bottom: 8px; }
-    .gh-main h1 { font-family: 'DM Serif Display', Georgia, serif; font-size: 42px; letter-spacing: -.02em; margin: 0 0 12px; }
-    .gh-sub { color: #6b6b68; font-size: 16px; margin: 0 0 40px; max-width: 560px; line-height: 1.65; }
-    .gh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-    .gh-card { display: block; background: #fff; border: 1px solid rgba(0,0,0,.08); border-top: 3px solid #C4D7B6; border-radius: 16px; padding: 24px; text-decoration: none; color: inherit; box-shadow: 0 1px 3px rgba(0,0,0,.06); transition: box-shadow .15s, transform .15s; }
-    .gh-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.07); text-decoration: none; transform: translateY(-1px); }
-    .gh-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .gh-favicon { font-size: 22px; }
-    .gh-version { font-size: 11px; color: #9a9a96; border: 1px solid rgba(0,0,0,.08); padding: 3px 9px; border-radius: 20px; }
-    .gh-card h2 { font-size: 17px; font-weight: 600; margin: 0 0 8px; color: #111110; }
-    .gh-card p { font-size: 13.5px; color: #6b6b68; line-height: 1.6; margin: 0 0 14px; }
+    .gh-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #4b6332; margin-bottom: 12px; }
+    .gh-main h1 { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; letter-spacing: -.02em; margin: 0 0 16px; }
+    .gh-sub { color: #666666; font-size: 18px; margin: 0 0 48px; max-width: 560px; line-height: 1.65; font-weight: 300; }
+    .gh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+    .gh-card { display: block; background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; box-shadow: 0 1px 3px rgba(0,0,0,.05); transition: box-shadow .15s, transform .15s; }
+    .gh-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.06); text-decoration: none; transform: translateY(-2px); }
+    .gh-card-hero { height: 120px; background: linear-gradient(135deg, #4b6332 0%, #3a4d27 100%); padding: 24px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .gh-card-hero h2 { font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 700; color: #fff; margin: 0; }
+    .gh-card-body { padding: 24px; }
+    .gh-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .gh-favicon { font-size: 20px; }
+    .gh-version { font-size: 10px; font-weight: 700; color: #666666; border: 1px solid #e5e7eb; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: .08em; }
+    .gh-card p { font-size: 13.5px; color: #666666; line-height: 1.6; margin: 0 0 14px; }
     .gh-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-    .gh-tags span { font-size: 11px; font-weight: 500; background: #eef4e8; color: #4a6e32; border: 1px solid #C4D7B6; padding: 2px 9px; border-radius: 20px; }
+    .gh-tags span { font-size: 10px; font-weight: 700; background: #f0f2eb; color: #4b6332; padding: 3px 9px; border-radius: 6px; text-transform: uppercase; letter-spacing: .08em; }
     .gh-updated { font-size: 12px !important; color: #9a9a96 !important; margin: 0 !important; }
   </style>`;
 

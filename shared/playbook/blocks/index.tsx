@@ -39,6 +39,13 @@ export function CardView({ card }: { card: Card }) {
 function HeroBlock({ props }: { props: BlockOf<"hero">["props"] }) {
   return (
     <div className="pb-cover-hero">
+      <svg className="pb-hero-watermark" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="100,10 170,170 100,135" fill="white" />
+        <polygon points="100,10 30,170 100,135" fill="white" opacity="0.55" />
+        <polygon points="30,170 100,135 170,170" fill="white" opacity="0.3" />
+        <polygon points="100,135 55,175 30,170" fill="white" opacity="0.45" />
+        <polygon points="100,135 145,175 170,170" fill="white" opacity="0.2" />
+      </svg>
       <p className="pb-eyebrow">{props.eyebrow}</p>
       <h2>{props.title}</h2>
       <p>
