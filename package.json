@@ -16,7 +16,7 @@
     "@octokit/rest": "^21.0.2",
     "@phosphor-icons/web": "^2.1.2",
     "@picocss/pico": "^2.0.6",
-    "diff": "^7.0.0",
+    "diff": "^8.0.3",
     "next": "^15.3.0",
     "next-auth": "^5.0.0-beta.25",
     "react": "^19.1.0",
