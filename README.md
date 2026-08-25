@@ -150,6 +150,56 @@ Every block is `{ "id", "type", "props" }`. The 19 block types:
 | Data | `table`, `changelog` |
 | Callouts | `alert`, `quote`, `ctaButton`, `image` |
 
+## How change detection works (the diff engine)
+
+Proposals are reviewed as a **visual before/after**, computed by `diffPlaybooks()` in
+`shared/playbook/diff.ts` from two JSON documents: the playbook on `main` ("before") and
+the playbook on the proposal branch ("after").
+
+### Identity: blocks have stable ids
+
+Every block carries a unique `id` generated at creation time (`newId()` in
+`shared/playbook/factory.ts`). Editing a block's props keeps its id; duplicating a block
+creates a new one. Display order is just the array position in `pages[].blocks[]` — so
+identity never depends on position.
+
+### The three diff levels
+
+1. **Structural** — pages and blocks are aligned by `id` and classified as `added`
+   (only in after), `removed` (only in before), `changed` (same id, different JSON), or
+   `moved` (same id, different relative order). Meta, theme and nav are compared the
+   same way at the top level.
+2. **Field** — for a `changed` block, `flattenObject()` flattens nested props into
+   dotted paths (`props.items.2`, `props.title`) and each differing leaf becomes a
+   `FieldChange { path, before, after }`.
+3. **Text** — each changed string field gets a per-word diff (`diffWords` from the
+   `diff` package), rendered as green inserted / red struck-through spans.
+
+### Move detection: longest increasing subsequence
+
+A naive "same id, different index" test produces false moves: inserting one block at the
+top shifts every later index by one, flagging the whole page as moved. Instead,
+`diffBlocks()` computes moves by **relative order**:
+
+1. Take the blocks present on both sides, in "after" order
+2. Map them to their "before" indices — e.g. moving `b` to the top turns
+   `[a, b, c]` → `[b, a, c]` into the sequence `[1, 0, 2]`
+3. Compute the **longest (strictly) increasing subsequence** (LIS) of that sequence —
+   here `[1, 2]`, i.e. `b` and `c` kept their relative order
+4. Blocks outside the LIS are the true moves (here only `a`, reported `0 → 1`)
+
+Inserts and removals don't disturb the LIS of the surviving blocks, so they never
+produce phantom moves. A swap is reported as a single move (either side is an equally
+minimal description).
+
+### Rendering the review
+
+The proposal screen (`src/app/proposals/[n]/ProposalView.tsx`) turns the diff into
+cards: added blocks are rendered as real components, removed blocks render dimmed,
+changed fields show the word-level diff, theme changes show before/after color
+swatches, and moves show "moved from position X to Y". Approving squash-merges the PR;
+the Pages workflow rebuilds the static site.
+
 ### Adding a new block type
 
 1. Add a variant to the `BlockSchema` discriminated union in `shared/playbook/schema.ts`

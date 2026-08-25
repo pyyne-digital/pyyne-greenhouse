@@ -76,34 +76,73 @@ function diffFlat(before: Record<string, string>, after: Record<string, string>)
   return changes;
 }
 
+/**
+ * Indices (into `values`) of a longest strictly increasing subsequence.
+ * Used to tell real moves apart from index shifts caused by inserts/removals:
+ * blocks inside the LIS kept their relative order, blocks outside it moved.
+ */
+function longestIncreasingRun(values: number[]): Set<number> {
+  const n = values.length;
+  const inLis = new Set<number>();
+  if (n === 0) return inLis;
+  const len = new Array<number>(n).fill(1);
+  const prev = new Array<number>(n).fill(-1);
+  let best = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < i; j++) {
+      if (values[j] < values[i] && len[j] + 1 > len[i]) {
+        len[i] = len[j] + 1;
+        prev[i] = j;
+      }
+    }
+    if (len[i] > len[best]) best = i;
+  }
+  for (let k = best; k !== -1; k = prev[k]) inLis.add(k);
+  return inLis;
+}
+
 function diffBlocks(before: Block[], after: Block[]): BlockChange[] {
   const changes: BlockChange[] = [];
   const beforeMap = new Map(before.map((b, i) => [b.id, { b, i }]));
   const afterMap = new Map(after.map((b, i) => [b.id, { b, i }]));
 
-  for (const [id, { b, i }] of beforeMap) {
-    if (!afterMap.has(id)) changes.push({ kind: "removed", block: b });
-    else {
-      const { b: a, i: j } = afterMap.get(id)!;
-      if (JSON.stringify(b) !== JSON.stringify(a)) {
-        changes.push({
-          kind: "changed",
-          blockId: id,
-          blockType: a.type,
-          fields: diffFlat(
-            flattenObject(b.props, "props"),
-            flattenObject(a.props, "props")
-          ),
-        });
-      }
-      if (i !== j && changes.every((c) => !(c.kind === "moved" && c.blockId === id))) {
-        changes.push({ kind: "moved", blockId: id, blockType: a.type, from: i, to: j });
-      }
+  for (const [id, { b }] of beforeMap) {
+    if (!afterMap.has(id)) {
+      changes.push({ kind: "removed", block: b });
+      continue;
+    }
+    const { b: a } = afterMap.get(id)!;
+    if (JSON.stringify(b) !== JSON.stringify(a)) {
+      changes.push({
+        kind: "changed",
+        blockId: id,
+        blockType: a.type,
+        fields: diffFlat(flattenObject(b.props, "props"), flattenObject(a.props, "props")),
+      });
     }
   }
   for (const [id, { b }] of afterMap) {
     if (!beforeMap.has(id)) changes.push({ kind: "added", block: b });
   }
+
+  // Moves: blocks present on both sides whose RELATIVE order changed.
+  // Take shared blocks in "after" order, map to their "before" indices;
+  // the longest increasing run kept its order — everything outside moved.
+  const sharedInAfterOrder = after.filter((b) => beforeMap.has(b.id));
+  const beforeIdxSeq = sharedInAfterOrder.map((b) => beforeMap.get(b.id)!.i);
+  const stable = longestIncreasingRun(beforeIdxSeq);
+  sharedInAfterOrder.forEach((b, k) => {
+    if (!stable.has(k)) {
+      changes.push({
+        kind: "moved",
+        blockId: b.id,
+        blockType: b.type,
+        from: beforeMap.get(b.id)!.i,
+        to: afterMap.get(b.id)!.i,
+      });
+    }
+  });
+
   return changes;
 }
 
