@@ -1,0 +1,38 @@
+/* =====================================================
+   Timeline block
+   ===================================================== */
+
+.pb-timeline { position: relative; padding-left: 32px; }
+.pb-timeline::before {
+  content: '';
+  position: absolute;
+  left: 5.5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--border);
+}
+.pb-timeline-item { position: relative; margin-bottom: 40px; }
+.pb-timeline-item:last-child { margin-bottom: 0; }
+.pb-timeline-dot {
+  position: absolute;
+  left: -31.5px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--brand);
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--brand);
+}
+.pb-timeline-item h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pb-timeline-item p { font-size: 14px; color: var(--ink-3); line-height: 1.65; }

@@ -7,7 +7,7 @@
  *   out/assets/*              — css + logo
  */
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, copyFileSync, rmSync } from "fs";
-import { join } from "path";
+import { dirname, join } from "path";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { PlaybookSchema, type Playbook } from "../shared/playbook";
@@ -142,11 +142,19 @@ function renderIndex(playbooks: Playbook[]): string {
   return htmlDocument("Pyyne · Playbooks", body, css).replace(`<link rel="stylesheet" href="${BASE_PATH}/assets/playbook.css" />`, "");
 }
 
+/** Inline CSS @import statements recursively (the playbook.css bundle index). */
+function bundleCss(entryPath: string): string {
+  const src = readFileSync(entryPath, "utf8");
+  return src.replace(/@import\s+["']\.\/(.+?)["'];?/g, (_m, rel) =>
+    bundleCss(join(dirname(entryPath), rel))
+  );
+}
+
 function main() {
   rmSync(OUT_DIR, { recursive: true, force: true });
   mkdirSync(join(OUT_DIR, "assets"), { recursive: true });
 
-  const css = readFileSync(join(ROOT, "shared/playbook/playbook.css"), "utf8");
+  const css = bundleCss(join(ROOT, "shared/playbook/playbook.css"));
   writeFileSync(join(OUT_DIR, "assets/playbook.css"), css);
   copyFileSync(join(ROOT, "public/assets/pyyne-logo.svg"), join(OUT_DIR, "assets/pyyne-logo.svg"));
 

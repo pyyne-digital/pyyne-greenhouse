@@ -1,0 +1,31 @@
+/* =====================================================
+   Contributors block (learnings cards: keep / change)
+   ===================================================== */
+
+.pb-contrib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.pb-contrib-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  border-left: 3px solid var(--brand);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s;
+}
+.pb-contrib-card:hover { box-shadow: var(--shadow-md); }
+.pb-contrib-card.pb-change { border-left-color: var(--accent-blue); }
+.pb-contrib-author {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.pb-contrib-card.pb-change .pb-contrib-author { color: var(--accent-blue); }
+.pb-contrib-card p { font-size: 13.5px; color: var(--ink-2); line-height: 1.65; }

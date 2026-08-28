@@ -1,0 +1,19 @@
+/* =====================================================
+   Alert block (info / warning / success)
+   ===================================================== */
+
+.pb-alert {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid transparent;
+}
+.pb-alert svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+.pb-alert p { font-size: 14px; line-height: 1.65; }
+.pb-alert-info { background: var(--accent-blue-light); border-color: #bfdbfe; color: #1e40af; }
+.pb-alert-warning { background: var(--accent-amber-light); border-color: #fde68a; color: #92400e; }
+.pb-alert-success { background: var(--brand-light); border-color: rgba(75, 99, 50, 0.12); color: var(--brand); }
+.pb-alert strong { font-weight: 700; }

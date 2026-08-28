@@ -1,0 +1,26 @@
+/* =====================================================
+   Checklist block
+   ===================================================== */
+
+.pb-checklist { list-style: none; padding: 0; }
+.pb-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.pb-checklist li:last-child { border-bottom: none; }
+.pb-checklist li::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--brand-mid);
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  background: var(--brand-light);
+}

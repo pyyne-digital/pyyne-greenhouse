@@ -1,0 +1,41 @@
+/* =====================================================
+   Responsive (mobile drawer) + print
+   ===================================================== */
+
+.pb-sidebar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  color: var(--ink-3);
+}
+@media (max-width: 860px) {
+  .pb-layout { flex-direction: column; }
+  .pb-sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    z-index: 90;
+    transition: left 0.25s ease;
+    box-shadow: var(--shadow-md);
+  }
+  .pb-sidebar.open { left: 0; }
+  .pb-sidebar-toggle { display: flex; }
+  .pb-main { padding: 28px 20px 60px; }
+  .pb-card-grid { grid-template-columns: 1fr; }
+  .pb-cover-hero { padding: 32px; }
+  .pb-cover-hero h2 { font-size: 28px; }
+  .pb-page-title { font-size: 32px; }
+}
+
+/* --- Print --- */
+@media print {
+  .pb-sidebar, .pb-topbar { display: none; }
+  .pb-layout { display: block; }
+  .pb-section-page { display: block !important; page-break-before: always; }
+  .pb-section-page:first-child { page-break-before: avoid; }
+  .pb-main { padding: 0; }
+}

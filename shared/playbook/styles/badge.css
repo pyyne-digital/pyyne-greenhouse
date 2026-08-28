@@ -1,0 +1,21 @@
+/* =====================================================
+   Badges + pill row
+   ===================================================== */
+
+.pb-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pb-badge-teal { background: var(--brand-light); color: var(--brand); }
+.pb-badge-blue { background: var(--accent-blue-light); color: var(--accent-blue); }
+.pb-badge-amber { background: var(--accent-amber-light); color: var(--accent-amber); }
+.pb-badge-gray { background: var(--surface-3); color: var(--ink-3); }
+.pb-badge-purple { background: var(--accent-purple-light); color: var(--accent-purple); }
+
+/* --- Pills row --- */
+.pb-pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }

@@ -1,0 +1,30 @@
+/* =====================================================
+   Letter cards (STAR) + Q&A list blocks
+   ===================================================== */
+
+.pb-letter-card { border-top: 3px solid var(--brand); }
+.pb-letter-flex { display: flex; gap: 16px; align-items: flex-start; }
+.pb-letter-glyph {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brand);
+  flex-shrink: 0;
+  width: 44px;
+}
+.pb-letter-question { font-size: 13px; color: var(--brand-dark); font-style: italic; margin-bottom: 8px; }
+.pb-letter-look { font-size: 12.5px; color: var(--ink-4); }
+
+/* --- QA list --- */
+.pb-qa-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.pb-qa-item:last-child { border-bottom: none; }
+.pb-qa-q { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.pb-qa-why { font-size: 13px; color: var(--ink-3); line-height: 1.6; }
+.pb-qa-reveals {
+  color: var(--ink-4);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}

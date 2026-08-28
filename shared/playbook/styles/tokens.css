@@ -1,0 +1,51 @@
+/* =====================================================
+   Design tokens — defaults; each playbook's theme JSON
+   overrides these via injected CSS custom properties.
+   ===================================================== */
+
+:root {
+  --brand: #4b6332;        /* forest */
+  --brand-dark: #3a4d27;   /* gradient end / text on light */
+  --brand-deep: #2c3a1f;   /* headings / hover */
+  --brand-light: #f0f2eb;  /* moss — surfaces */
+  --brand-mid: #6a8a50;    /* sage */
+  --brand-sage: #a3b18a;   /* leaf — borders, dividers */
+  --brand-soft: #c5d9b0;   /* soft green */
+
+  --ink: #1a1a1a;
+  --ink-2: #3a3a38;
+  --ink-3: #666666;
+  --ink-4: #9a9a96;
+
+  --surface: #ffffff;
+  --surface-2: #fcfcf9;
+  --surface-3: #f0ede8;
+
+  --border: #e5e7eb;
+  --border-strong: rgba(0, 0, 0, 0.15);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --sidebar-width: 256px;
+  --content-max: 820px;
+  --header-h: 56px;
+
+  --accent-blue: #2563eb;
+  --accent-blue-light: #eff6ff;
+  --accent-amber: #b45309;
+  --accent-amber-light: #fffbeb;
+  --accent-red: #dc2626;
+  --accent-red-light: #fef2f2;
+  --accent-purple: #7c3aed;
+  --accent-purple-light: #f5f3ff;
+}

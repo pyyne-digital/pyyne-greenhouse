@@ -21,7 +21,7 @@ Pyyne's visual playbook editor: anyone with a `@pyyne.com` Google account can su
 | Technology | Version | What it is used for |
 |---|---|---|
 | [Tailwind CSS](https://tailwindcss.com) v4 | `^4` | All app screens. Brand tokens live in the `@theme` block of `src/app/globals.css` (forest/sage/leaf/moss palette, Outfit/Newsreader/JetBrains Mono fonts). |
-| Custom design system | — | The playbook content look lives in `shared/playbook/playbook.css` (`.pb-*` classes), driven by CSS custom properties injected per playbook from the JSON `theme` object. Shared by the app preview and the static site. |
+| Custom design system | — | The playbook content look lives in `shared/playbook/styles/` (`.pb-*` classes, one CSS file per block component), driven by CSS custom properties injected per playbook from the JSON `theme` object. `shared/playbook/playbook.css` is just the bundle index (`@import`s); the static build inlines them. Shared by the app preview and the static site. |
 | [Phosphor Icons](https://phosphoricons.com) | `^2` | UI icons via `<PhIcon name="…">` (web font, regular weight). |
 
 **Style organization (project convention):** class strings live outside components, in `src/styles/` — `tokens.ts` (colors/fonts for JS use), `ui.ts` (shared primitives: buttons, inputs, badges, diff text), and one file per screen (`home.ts`, `shell.ts`, `editor.ts`, `proposals.ts`, `history.ts`, `standalone.ts`). Components import constants (`className={home.statCard}`) instead of inline class soup.
@@ -100,7 +100,11 @@ flowchart LR
 │   ├── schema.ts                 # zod schemas: Playbook, Page, Block (discriminated union), Theme
 │   ├── types.ts                  # TS types inferred from the schemas + proposal types
 │   ├── theme.ts                  # defaultTheme (Pyyne tokens) + theme→CSS variables
-│   ├── playbook.css              # The playbook design system (classes .pb-*)
+│   ├── playbook.css              # Bundle index — @imports only
+│   ├── styles/                   # Design system split per component (.pb-*):
+│   │   │                         #   tokens, base, layout, typography, card, hero,
+│   │   │                         #   alert, checklist, timeline, badge, contributors,
+│   │   │                         #   table, format-card, letter-cards, media, responsive
 │   ├── icons.tsx                 # Named inline SVG icon registry
 │   ├── blocks/index.tsx          # One React component per block type + <BlockView> router
 │   ├── PlaybookShell.tsx         # Full layout (topbar, sidebar, pages) for preview/static
@@ -205,7 +209,7 @@ the Pages workflow rebuilds the static site.
 1. Add a variant to the `BlockSchema` discriminated union in `shared/playbook/schema.ts`
 2. Register the type name in `BLOCK_TYPES` and its palette label in `BLOCK_LABELS` (`factory.ts`)
 3. Add a factory default in `createBlock` (`factory.ts`)
-4. Add a render case in `BlockView` (`shared/playbook/blocks/index.tsx`) + CSS in `playbook.css`
+4. Add a render case in `BlockView` (`shared/playbook/blocks/index.tsx`) + a `shared/playbook/styles/<block>.css` file (registered as an `@import` in `playbook.css`)
 5. Add an inspector form in `src/app/playbooks/[slug]/edit/BlockInspector.tsx`
 
 The diff engine, proposals flow and static build pick it up automatically.

@@ -1,0 +1,27 @@
+/* =====================================================
+   Table block
+   ===================================================== */
+
+.pb-table-wrap { overflow-x: auto; }
+.pb-eval-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.pb-eval-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-4);
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+.pb-eval-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.pb-eval-table tr:last-child td { border-bottom: none; }
+.pb-eval-table tr:hover td { background: var(--surface-2); }
+.pb-eval-table td:first-child { font-weight: 700; color: var(--ink); }

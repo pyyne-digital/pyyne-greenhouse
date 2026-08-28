@@ -1,0 +1,13 @@
+/* --- Reset + root scope --- */
+.pb-root, .pb-root *, .pb-root *::before, .pb-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.pb-root {
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+.pb-root img, .pb-root svg { display: block; max-width: 100%; }
+.pb-root a { color: var(--brand); text-decoration: none; }
+.pb-root a:hover { color: var(--brand-deep); text-decoration: underline; }

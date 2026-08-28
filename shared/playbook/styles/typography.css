@@ -1,0 +1,61 @@
+/* =====================================================
+   Typography — page headers, section headers, subheading,
+   rich text, separator.
+   ===================================================== */
+
+/* --- Page Header --- */
+.pb-page-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin-bottom: 16px;
+}
+.pb-page-title {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.pb-page-subtitle {
+  font-size: 18px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  max-width: 640px;
+  margin-bottom: 40px;
+}
+.pb-page-divider { height: 1px; background: var(--border); margin-bottom: 40px; }
+
+/* --- Section Header --- */
+.pb-section-header { margin-bottom: 24px; }
+.pb-section-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.pb-section-desc { font-size: 14px; color: var(--ink-3); line-height: 1.6; }
+
+/* --- Sub-section heading --- */
+.pb-sub-heading {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  margin-bottom: 14px;
+  margin-top: 32px;
+}
+.pb-sub-heading:first-child { margin-top: 0; }
+
+/* --- Rich text --- */
+.pb-richtext { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-bottom: 24px; }
+
+/* --- Separator --- */
+.pb-sep { height: 1px; background: var(--border); margin: 32px 0; }

@@ -1,0 +1,57 @@
+/* =====================================================
+   Media blocks — image, quote, CTA button
+   ===================================================== */
+
+/* --- Image block --- */
+.pb-image { margin-bottom: 24px; }
+.pb-image img { border-radius: var(--radius-lg); margin: 0 auto; }
+.pb-image figcaption {
+  font-size: 12.5px;
+  color: var(--ink-4);
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* --- Quote block --- */
+.pb-quote {
+  border-left: 3px solid var(--brand);
+  padding: 4px 0 4px 20px;
+  margin-bottom: 24px;
+}
+.pb-quote p {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.pb-quote cite {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--ink-4);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --- CTA button --- */
+.pb-cta { display: inline-block; margin-bottom: 24px; }
+.pb-cta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+}
+.pb-cta a:hover { text-decoration: none; }
+.pb-cta.pb-cta-primary a { background: var(--brand); color: #fff; }
+.pb-cta.pb-cta-primary a:hover { background: var(--brand-dark); color: #fff; }
+.pb-cta.pb-cta-outline a { border: 1.5px solid var(--brand); color: var(--brand); }
+.pb-cta.pb-cta-outline a:hover { background: var(--brand-light); color: var(--brand-deep); }

@@ -1,0 +1,60 @@
+/* =====================================================
+   Hero block (cover) — gradient + watermark logo + tags
+   ===================================================== */
+
+.pb-cover-hero {
+  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+  border-radius: var(--radius-lg);
+  padding: 48px 56px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.pb-cover-hero .pb-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.6;
+  margin-bottom: 20px;
+}
+.pb-cover-hero h2 {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+.pb-cover-hero p {
+  font-size: 16px;
+  color: var(--brand-sage);
+  line-height: 1.7;
+  width: 100%;
+  max-width: 640px;
+  position: relative;
+  z-index: 1;
+}
+.pb-cover-hero .pb-hero-watermark {
+  position: absolute;
+  right: -48px;
+  bottom: -48px;
+  width: 280px;
+  height: 280px;
+  opacity: 0.08;
+}
+.pb-cover-meta { display: flex; gap: 8px; margin-top: 32px; flex-wrap: wrap; position: relative; z-index: 1; }
+.pb-cover-meta-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
