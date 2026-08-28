@@ -40,6 +40,10 @@
   --content-max: 820px;
   --header-h: 56px;
 
+  /* Block flow spacing — every block-level component uses margin-block: var(--block-gap).
+     Adjacent vertical margins collapse, so any two blocks end up 24px apart. */
+  --block-gap: 24px;
+
   --accent-blue: #2563eb;
   --accent-blue-light: #eff6ff;
   --accent-amber: #b45309;

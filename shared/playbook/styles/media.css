@@ -3,7 +3,7 @@
    ===================================================== */
 
 /* --- Image block --- */
-.pb-image { margin-bottom: 24px; }
+.pb-image { margin-block: var(--block-gap); }
 .pb-image img { border-radius: var(--radius-lg); margin: 0 auto; }
 .pb-image figcaption {
   font-size: 12.5px;
@@ -16,7 +16,7 @@
 .pb-quote {
   border-left: 3px solid var(--brand);
   padding: 4px 0 4px 20px;
-  margin-bottom: 24px;
+  margin-block: var(--block-gap);
 }
 .pb-quote p {
   font-family: var(--font-display);
@@ -37,7 +37,7 @@
 }
 
 /* --- CTA button --- */
-.pb-cta { display: inline-block; margin-bottom: 24px; }
+.pb-cta { display: inline-block; margin-block: var(--block-gap); }
 .pb-cta a {
   display: inline-flex;
   align-items: center;

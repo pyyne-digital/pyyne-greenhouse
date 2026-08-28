@@ -349,7 +349,7 @@ export function EditorClient({
 
                     {page?.blocks.map((b, i) => (
                       <React.Fragment key={b.id}>
-                        <div className={`${ed.blockGroup} mb-6`}>
+                        <div className={ed.blockGroup}>
                           <div className={ed.blockToolbar}>
                             <button type="button" className={ed.blockToolbarBtn} title="Edit block" onClick={() => setEditBlockId(b.id)}>
                               <PhIcon name="pencil-simple" />

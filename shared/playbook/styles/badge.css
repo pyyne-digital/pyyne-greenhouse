@@ -18,4 +18,4 @@
 .pb-badge-purple { background: var(--accent-purple-light); color: var(--accent-purple); }
 
 /* --- Pills row --- */
-.pb-pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.pb-pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-block: var(--block-gap); }

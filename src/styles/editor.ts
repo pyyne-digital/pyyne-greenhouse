@@ -44,8 +44,10 @@ export const editor = {
   blockToolbarBtn:
     "p-2 bg-white border border-border rounded-lg text-muted hover:text-forest hover:border-forest/40 transition-colors cursor-pointer shadow-sm",
   blockSelected: "outline-2 outline-dashed outline-forest rounded",
+  /* Blocks carry the rhythm (margin-block: var(--block-gap)); the zone only
+     needs a minimal own margin — neighbor margins collapse to 24px. */
   insertZone:
-    "py-10 border-y border-dashed border-border flex items-center justify-center group cursor-pointer hover:bg-gray-50 transition-all mb-12 rounded-xl",
+    "my-2 py-5 border border-dashed border-border flex items-center justify-center group cursor-pointer hover:bg-gray-50 transition-all rounded-xl",
   insertZoneInner: "flex items-center gap-3 text-muted group-hover:text-forest transition-colors",
   insertZoneLabel: "text-xs font-bold uppercase tracking-widest",
   editableFocus: "focus:outline-2 focus:outline-dashed focus:outline-forest focus:outline-offset-8 focus:rounded",

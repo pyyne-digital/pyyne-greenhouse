@@ -133,6 +133,9 @@
 .pb-main { flex: 1; padding: 48px 80px 96px; overflow-y: auto; scroll-behavior: smooth; }
 .pb-section-page { display: none; max-width: var(--content-max); animation: pbFadeIn 0.18s ease; }
 .pb-section-page.visible { display: block; }
+/* No double spacing at page edges: the page divider already provides the gap. */
+.pb-section-page > :first-child { margin-top: 0; }
+.pb-section-page > :last-child { margin-bottom: 0; }
 
 @keyframes pbFadeIn {
   from { opacity: 0; transform: translateY(6px); }

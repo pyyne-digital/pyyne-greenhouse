@@ -7,11 +7,13 @@
   border: 1px solid #f0f0ec;
   border-radius: var(--radius-lg);
   padding: 32px;
-  margin-bottom: 24px;
+  margin-block: var(--block-gap);
   box-shadow: var(--shadow-sm);
 }
 .pb-card.pb-card-highlight { background: var(--brand-light); border-color: var(--brand-sage); }
-.pb-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+.pb-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-block: var(--block-gap); }
+/* Inside a grid the gap handles spacing — cards must not add their own. */
+.pb-card-grid > .pb-card { margin: 0; }
 .pb-card-grid.pb-cols-3 { grid-template-columns: repeat(3, 1fr); }
 .pb-card-grid.pb-cols-auto { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 .pb-card-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }

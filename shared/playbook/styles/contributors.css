@@ -6,7 +6,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
-  margin-bottom: 20px;
+  margin-block: var(--block-gap);
 }
 .pb-contrib-card {
   background: var(--surface);

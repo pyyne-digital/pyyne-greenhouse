@@ -42,20 +42,19 @@
 }
 .pb-section-desc { font-size: 14px; color: var(--ink-3); line-height: 1.6; }
 
-/* --- Sub-section heading --- */
+/* --- Sub-section heading (labels what follows: bigger above, tighter below) --- */
 .pb-sub-heading {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-4);
-  margin-bottom: 14px;
-  margin-top: 32px;
+  margin-block: 32px 12px;
 }
 .pb-sub-heading:first-child { margin-top: 0; }
 
 /* --- Rich text --- */
-.pb-richtext { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-bottom: 24px; }
+.pb-richtext { font-size: 15px; color: var(--ink-2); line-height: 1.7; margin-block: var(--block-gap); }
 
 /* --- Separator --- */
-.pb-sep { height: 1px; background: var(--border); margin: 32px 0; }
+.pb-sep { height: 1px; background: var(--border); margin-block: 32px; }
